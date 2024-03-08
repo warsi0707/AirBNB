@@ -1,0 +1,51 @@
+<%- layout("/layouts/boilerplate") %>
+<body>
+    <div class="row">
+        <div class="col-8 offset-2"> <br>
+    <h3>Create a new listings</h3>
+    <form action="/listings" method="post" novalidate class="row g-3 needs-validation" >
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control"name="listings[title]" placeholder="Enter title" required>
+            <div class="valid-feedback">Looks good!</div>
+        </div>
+        <div class="mb-3">
+            <label for="descriptions" class="form-label">Descriptions</label>
+            <textarea name="listings[descriptions]" class="form-control" required></textarea> 
+            <div class="invalid-feedback">Description should be less</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="image" class="form-label">Image link</label>
+            <input type="text" name="listings[image]" class="form-control" placeholder="enter image URL/Link" >
+        </div>
+        <div class="row">
+            <div class="mb-3 col-4">
+                <label for="price" class="form-label">Price</label>
+                <input  name="listings[price]" placeholder="Enter price" class="form-control" required>
+                <div class="invalid-feedback">Price Should Be Valid</div>
+            </div>
+    
+            <div class="mb-3 col-8">
+                <label for="country" class="form-label">Country</label>
+                <input type="text" name="listings[country]" placeholder="Enter country" class="form-control" required>
+                <div class="invalid-feedback">Country Should Be Valid</div>
+            </div>
+    
+
+        </div>
+
+        
+        <div class="mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" name="listings[location]" placeholder="Enter location" class="form-control" required>
+            <div class="invalid-feedback">Location Should Be Valid</div>
+        </div> <br>
+      
+        <button class="btn btn-dark">Submit</button>
+        <br> <br>
+    </form>
+</div>
+</div>
+    
+</body>

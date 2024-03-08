@@ -1,0 +1,37 @@
+<%- layout("/layouts/boilerplate") %>
+
+  <body> <br>
+    <div class="row mt-2">
+      <div class="col-8 offset-2">
+        <h3>Listing details: </h3>
+        <div class="card col-7 offset-2">
+          <img src="<%- listings.image %>" class="card-img-top" alt="...">
+          <div class="card-body">
+            <p class="card-text"><%- listings.title %></p>
+            <ul>
+              <li><%- listings.description %></li>
+              <li>&#8377 <%- listings.price%></li>
+              <li><%- listings.location %></li>
+              <li><%- listings.country %></li>
+            </ul>
+          </div>
+        </div>
+
+
+       
+        <br>
+
+       
+
+      </div>
+    </div>
+    
+    <div class="btns mb-4">
+      <a href="/listings/<%= listings._id %>/edit" class="btn btn-dark col-1 offset-2">Edit</a>
+      <form action="/listings/<%= listings._id %>?_method=DELETE" method="post" >
+        <button class="btn btn-danger  offset-2">Delete</button>
+      </form>
+    </div>
+
+
+  </body>

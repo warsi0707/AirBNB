@@ -1,0 +1,52 @@
+<%- layout("/layouts/boilerplate") %>
+<body>
+    <div class="row">
+        <div class="col-8 offset-2"> <br>
+    <h3>Create a new listings</h3>
+    <form action="/listings" method="post" novalidate class="row g-3 needs-validation" >
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control"name="listings[title]" value="<%= listings.title %>" required>
+            <div class="valid-feedback">Looks good!</div>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Descriptions</label>
+            <textarea name="listings[description]" class="form-control" required><%= listings.description %></textarea> 
+            <div class="invalid-feedback">Description should be important</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="image" class="form-label">Image link</label>
+            <input type="text" name="listings[image]" class="form-control" required value="<%= listings.image %>">
+            <div class="invalid-feedback">Image link should be valid</div>
+        </div>
+        <div class="row">
+            <div class="mb-3 col-4">
+                <label for="price" class="form-label">Price</label>
+                <input type="number" name="listings[price]" value="<%= listings.price %>" class="form-control" required>
+                <div class="invalid-feedback">Price should be valid</div>
+            </div>
+    
+            <div class="mb-3 col-8">
+                <label for="country" class="form-label">Country</label>
+                <input type="text" name="listings[country]" value="<%= listings.country %>" class="form-control" required>
+                <div class="invalid-feedback">Country should be valid</div>
+            </div>
+    
+
+        </div>
+
+        
+        <div class="mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" name="listings[location]" value="<%= listings.title %>" class="form-control" required>
+            <div class="invalid-feedback">Locaton should be valid</div>
+        </div> <br>
+      
+        <button class="btn btn-dark">Submit</button>
+        <br> <br>
+    </form>
+</div>
+</div>
+    <script src="/js/script.js"></script>
+</body>
