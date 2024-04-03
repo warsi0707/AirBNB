@@ -3,15 +3,15 @@
     <div class="row">
         <div class="col-8 offset-2"> <br>
     <h3>Create a new listings</h3>
-    <form action="/listings" method="post" novalidate class="row g-3 needs-validation" >
+    <form action="/listings/<%= listings._id %>" method="post" novalidate class="row g-3 needs-validation" >
         <div class="mb-3">
             <label for="title" class="form-label">Title</label>
-            <input type="text" class="form-control"name="listings[title]" value="<%= listings.title %>" required>
+            <input type="text" class="form-control"name="listings[title]" required value="<%= listings.title %>" >
             <div class="valid-feedback">Looks good!</div>
         </div>
         <div class="mb-3">
             <label for="description" class="form-label">Descriptions</label>
-            <textarea name="listings[description]" class="form-control" required><%= listings.description %></textarea> 
+            <textarea name="listings[descriptions]" class="form-control" required><%= listings.description %></textarea> 
             <div class="invalid-feedback">Description should be important</div>
         </div>
 
@@ -48,5 +48,5 @@
     </form>
 </div>
 </div>
-    <script src="/js/script.js"></script>
+    
 </body>

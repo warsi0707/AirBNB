@@ -1,6 +1,7 @@
 const Joi = require("joi")
 
-const listingSchema = Joi.object({
+//Schema for server-side form validation for listings
+module.exports.listingSchema = Joi.object({
     listings : Joi.object({
         title:Joi.string().required(),
         description: Joi.string().required(),
@@ -9,5 +10,13 @@ const listingSchema = Joi.object({
         location: Joi.string().required(),
         country: Joi.string().required(),
     }).required()
-})
-module.exports = listingSchema;
+}),
+
+
+//server-side validaton for review
+module.exports.reviewSchema = Joi.object({
+    review: Joi.object({
+        rating: Joi.number().min(1).max(5),
+        comment: Joi.string().required()
+    })
+}).required()
