@@ -8,8 +8,6 @@ const {reviewSchema} = require("../schema.js")
 const {validateReview, isLogedIn, isReviewAuthor} = require("../middleware.js")
 
 
-
-
 // Post reviews route
 router.post("/",isLogedIn,validateReview, wrapAsync(async(req, res) =>{
     let listing = await Listing.findById(req.params.id)
