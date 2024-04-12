@@ -76,9 +76,10 @@
     align-items: space-evenly;
     
 }
-.f-info-socials i{
+.f-info-socials a{
     margin-right: 1.2rem;
 }
+
 
 
 /* btns */
