@@ -86,3 +86,8 @@
 .btns{
     display: flex;
 }
+
+.username{
+    margin-top: 8px;
+    color: red;
+}

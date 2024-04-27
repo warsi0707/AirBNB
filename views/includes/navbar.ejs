@@ -45,6 +45,7 @@
           <a class="nav-link" href="/login"><b>LogIn</b></a>
           <% } %>
           <% if (currentUSer) { %>
+            <h5 class="username"><%= currentUSer.username %></h5>
             <a class="nav-link" href="/logout"><b>LogOut</b></a>
           <% } %>
           
