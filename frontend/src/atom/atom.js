@@ -1,5 +1,10 @@
 import {atom, selector} from "recoil"
 
+
+export const listingData = atom({
+    key: "listingData",
+    default: []
+})
 export const usernameAtom = atom({
     key: "username",
     default: ""

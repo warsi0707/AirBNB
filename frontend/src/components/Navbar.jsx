@@ -51,7 +51,7 @@ export default function Navbar() {
     <div>
         <nav className='w-full p-2 md:p-7 border-b-2 flex justify-between'>
             <div className="logo ml-5  md:ml-10">
-                <Link to={"/"} className='flex gap-2'>
+                <Link to={"/#"} className='flex gap-2'>
                 <img src="/logo.png" width={30} height={10} className='h-8' alt="" />
                 <h1 className='text-red-500 font-bold text-2xl hidden sm:block'>airbnb</h1>
                 </Link>

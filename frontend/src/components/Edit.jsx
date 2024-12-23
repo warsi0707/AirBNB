@@ -60,7 +60,7 @@ export default function Edit() {
                 setBeds()
                 setGuest()
                 setTimeout(() => {
-                    navigate(`/detail/${id}`)
+                    navigate(`/#detail/${id}`)
                     setMessage("")
                 }, 2000);
             }

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import Category from './Category'
 import { Link } from 'react-router-dom'
+import { useRecoilState } from 'recoil'
+import { listingData } from '../atom/atom'
 
 export default function Home() {
-  const [data, setData] = useState([])
+  const [data, setData] = useRecoilState(listingData)
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(true)
   const AllListing =async()=>{
@@ -17,7 +19,6 @@ export default function Home() {
       if(response.ok){
         setLoading(false)
         setData(result.listings)
-       
       }
     }catch(err){
       setError(err)
@@ -33,7 +34,7 @@ export default function Home() {
     <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-5 lg:grid-cols-3  xl:grid-cols-4 '>
       {data.map((item)=>(
       <div key={item._id} className='h-auto w-auto px-5 sm:w-72 md:w-[400px] lg:w-96 xl:w-80 sm:mx-auto rounded-xl'>
-        <Link to={`/detail/${item._id}`}> 
+        <Link to={`/#detail/${item._id}`}> 
           <img src={item.image} alt="" className='w-full h-60 object-cover rounded-xl' />
         <div className='py-3'>
         <div className=' flex justify-between space-y-2'>
@@ -48,7 +49,6 @@ export default function Home() {
       </div> 
       ))}
     </div>
-
     </>
   )
 }
