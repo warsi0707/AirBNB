@@ -1,5 +1,4 @@
-import {BrowserRouter as HashRouter,  Routes, Route } from "react-router-dom";
-import { redirect } from "react-router";
+import {BrowserRouter ,  Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import Navbar from "./components/Navbar";
 import Details from "./components/Details";
@@ -10,13 +9,13 @@ import AddListing from "./components/AddListing";
 import { useRecoilValue } from "recoil";
 import { authenticatedAtom } from "./atom/atom";
 import Edit from "./components/Edit";
+import ErrorPage from "./components/ErrorPage";
 
 function App() {
   const isAuthenticated = useRecoilValue(authenticatedAtom)
-
   return (
     <>
-    <HashRouter>
+    <BrowserRouter>
       <Navbar/>
       <Routes>
         <Route path="/" element={<Home/>}/>
@@ -25,9 +24,10 @@ function App() {
         <Route path="/signin" element={<Signin/>}/>
         <Route path="/listing/:id" element={<Edit/>}/>
         {isAuthenticated? <Route path="/add"  element={<AddListing/>}/>: ""}
+        <Route path="*" element={<ErrorPage/>}/>
       </Routes>
       <Footer/>
-    </HashRouter>
+    </BrowserRouter>
       
     </>
   )

@@ -7,6 +7,7 @@ const mongoose = require("mongoose")
 const cookieParser = require("cookie-parser")
 const app = express()
 const cors = require("cors")
+const path = require("path")
 
 app.use(cors({
     // origin: "http://localhost:5173",
@@ -15,6 +16,11 @@ app.use(cors({
 }))
 app.use(express.json())
 app.use(cookieParser());
+
+app.use(express.static(path.join(__dirname, "build")))
+app.get("*",(req, res)=>{
+    res.sendFile(path.join(__dirname, 'build', 'index.html'))
+})
 
 app.use("/v1/api/listings", listingRouter)
 app.use("/v1/api/user",userRouter)

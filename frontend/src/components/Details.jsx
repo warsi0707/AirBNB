@@ -73,7 +73,7 @@ export default function Details() {
            </div>
 
            <div className="btn flex gap-5 justify-center sm:justify-start">
-            <Link to={`/#listing/${listing._id}`} className='bg-black text-white py-1 px-7 text-xl rounded-md '>Edit</Link>
+            <Link to={`/listing/${listing._id}`} className='bg-black text-white py-1 px-7 text-xl rounded-md '>Edit</Link>
             <button onClick={DeleteListing} className='bg-red-500 text-white py-1 px-7 text-xl rounded-md '>Delete</button>
            </div>
         </div>
