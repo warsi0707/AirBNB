@@ -10,7 +10,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const AllListing =async()=>{
     try{
-      const response = await fetch("https://airbnb-1-bgud.onrender.com/v1/api/listings",{
+      const response = await fetch("https://air-bnb-liart.vercel.app/v1/api/listings",{
         method: "GET",
       })
       const result = await response.json()

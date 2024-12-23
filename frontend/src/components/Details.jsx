@@ -16,7 +16,7 @@ export default function Details() {
 
   const Getadata =async()=>{
     try{
-      const response = await fetch(`https://airbnb-1-bgud.onrender.com/v1/api/listings/${id}`,{
+      const response = await fetch(`https://air-bnb-liart.vercel.app/v1/api/listings/${id}`,{
         method: "GET"
       })
       const result = await response.json()
@@ -29,7 +29,7 @@ export default function Details() {
   }
   const DeleteListing =async()=>{
     try{
-      const response = await fetch(`https://airbnb-1-bgud.onrender.com/v1/api/listings/${id}`,{
+      const response = await fetch(`https://air-bnb-liart.vercel.app/v1/api/listings/${id}`,{
         method: "DELETE",
         credentials: "include"
       })

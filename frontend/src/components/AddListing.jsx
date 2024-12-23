@@ -18,7 +18,7 @@ export default function AddListing() {
     const AddListing =async(e)=>{
         e.preventDefault()
         try{
-            const respone = await fetch("https://airbnb-1-bgud.onrender.com/v1/api/listings",{
+            const respone = await fetch("https://air-bnb-liart.vercel.app/v1/api/listings",{
                 method: "POST",
                 credentials: "include",
                 headers: {

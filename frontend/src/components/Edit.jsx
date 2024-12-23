@@ -18,7 +18,7 @@ export default function Edit() {
     const {id} = useParams()
 
     const GetData = async()=>{
-        const response = await fetch(`https://airbnb-1-bgud.onrender.com/v1/api/listings/${id}`,{
+        const response = await fetch(`https://air-bnb-liart.vercel.app/v1/api/listings/${id}`,{
             method: "GET",
             credentials: "include"
         })
@@ -39,7 +39,7 @@ export default function Edit() {
     const EditListing =async(e)=>{
         e.preventDefault()
         try{
-            const respone = await fetch(`https://airbnb-1-bgud.onrender.com/v1/api/listings/${id}`,{
+            const respone = await fetch(`https://air-bnb-liart.vercel.app/v1/api/listings/${id}`,{
                 method: "PUT",
                 credentials: "include",
                 headers: {

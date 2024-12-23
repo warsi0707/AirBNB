@@ -1,4 +1,4 @@
-import {BrowserRouter ,  Routes, Route } from "react-router-dom";
+import {BrowserRouter as Router,  Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import Navbar from "./components/Navbar";
 import Details from "./components/Details";
@@ -15,7 +15,7 @@ function App() {
   const isAuthenticated = useRecoilValue(authenticatedAtom)
   return (
     <>
-    <BrowserRouter>
+    <Router>
       <Navbar/>
       <Routes>
         <Route path="/" element={<Home/>}/>
@@ -27,7 +27,7 @@ function App() {
         <Route path="*" element={<ErrorPage/>}/>
       </Routes>
       <Footer/>
-    </BrowserRouter>
+    </Router>
       
     </>
   )

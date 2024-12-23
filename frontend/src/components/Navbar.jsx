@@ -22,7 +22,7 @@ export default function Navbar() {
     }
     const Logout = async()=>{
         try{
-            const response = await fetch("https://airbnb-1-bgud.onrender.com/v1/api/user/logout",{
+            const response = await fetch("https://air-bnb-liart.vercel.app/v1/api/user/logout",{
                 method: "POST",
                 credentials: "include"
             })

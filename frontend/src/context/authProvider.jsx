@@ -15,7 +15,7 @@ export default function AuthProvider({children}) {
 
   useEffect(()=>{
     const verifyLogin =async()=>{
-      const response = await fetch("https://airbnb-1-bgud.onrender.com/v1/api/user/auth",{
+      const response = await fetch("https://air-bnb-liart.vercel.app/v1/api/user/auth",{
         method: "GET",
         credentials: "include"
       })
