@@ -10,8 +10,8 @@ const cors = require("cors")
 const path = require("path")
 
 app.use(cors({
-    // origin: "http://localhost:5173",
-    origin: "https://airbnb-fe-xmbs.onrender.com",
+    origin: "http://localhost:5173",
+    // origin: "https://airbnb-fe-xmbs.onrender.com",
     credentials: true
 }))
 app.use(express.json())
