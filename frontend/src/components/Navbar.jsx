@@ -76,7 +76,7 @@ export default function Navbar() {
                 <h1 className='w-full hover:bw-full hover:bg-gray-100 p-1.5 px-5 text-gray-800 hover:cursor-pointer py-2' ><Link to={"/signin"}>Signin</Link></h1>
                 </>:
                 <><h1 className='w-full hover:bw-full hover:bg-gray-100 p-1.5 px-5 text-gray-800 hover:cursor-pointer py-2' ><button onClick={Logout}>Logout</button></h1>
-                <h1 className='w-full hover:bg-gray-100 p-1.5 px-5 text-gray-800 hover:cursor-pointer py-2'><Link>Airbnb Your Home</Link></h1>
+                <h1 className='w-full hover:bg-gray-100 p-1.5 px-5 text-gray-800 hover:cursor-pointer py-2'>{isAuthenticated? <Link to={"/add"}>Airbnb Your Home</Link>: ""}</h1>
                 </>
           }
             

@@ -37,11 +37,11 @@ export default function Home() {
           <img src={item.image} alt="" className='w-full h-60 object-cover rounded-xl' />
         <div className='py-3'>
         <div className=' flex justify-between space-y-2'>
-          <h1 className='text-xl'>{item.title}</h1>
-          <h1><i className="fa-solid fa-dollar-sign"></i> {item.price}</h1>
+          <h1 className='text-xl mt-1'>{item.title}</h1>
+          <h1 className='text-gray-600'><i className="fa-solid fa-dollar-sign "></i> {item.price}</h1>
         </div>
         <div>
-          <h1>545 kilometer away</h1>
+          <h1 className='text-gray-600'></h1>
         </div>
         </div>
         </Link>

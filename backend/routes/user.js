@@ -5,9 +5,7 @@ const { JWT_USER_SECRET} = require("../config")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken");
 const { userAuth } = require("../middleware/auth");
-const InputValidation = require("../middleware/inputValidation");
-const { LoginSchema } = require("../model/Schema");
-const {z} = require("zod")
+
 
 userRouter.post("/signup",async(req, res) =>{
     const {username, password, email} = req.body;

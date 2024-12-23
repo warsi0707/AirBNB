@@ -6,7 +6,11 @@ const Schmea = mongoose.Schema
 const userSchema = new mongoose.Schema({
     username: {type: String,  required: true, unique: true},
     password: String,
-    email: String
+    email: String,
+    savedListing: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Listing"
+    }]
 })
 const adminSchema = new mongoose.Schema({
     username: {type: String,  required: true, unique: true},

@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react'
 import {useNavigate, useParams} from "react-router"
 import { Link } from 'react-router'
 import { useRecoilState } from 'recoil'
-import { errorAtom, listingAtom, messageAtom, ownerAtom } from '../atom/atom'
+import { errorAtom, listingAtom, messageAtom} from '../atom/atom'
 
 
 export default function Details() {
   const [listing, setListing] = useRecoilState(listingAtom)
   const [message, setMessage] = useRecoilState(messageAtom)
   const [error, setError] = useRecoilState(errorAtom)
+
   const {id} = useParams()
   const navigate = useNavigate()
 
@@ -45,7 +46,7 @@ export default function Details() {
       setError(error.message)
     }
   }
-
+ 
   useEffect(()=>{
     Getadata() 
   },[])
@@ -75,16 +76,16 @@ export default function Details() {
             <Link to={`/listing/${listing._id}`} className='bg-black text-white py-1 px-7 text-xl rounded-md '>Edit</Link>
             <button onClick={DeleteListing} className='bg-red-500 text-white py-1 px-7 text-xl rounded-md '>Delete</button>
            </div>
-  
         </div>
         <div className="price w-auto sm:w-60 py-5 shadow-xl mx-auto mt-10 sm:mt-10 bg-white rounded-xl border-2 border-gray-200 p-5">
-          <div className=" mb-8">
+          <div className="mb-4">
             <h1 className='space-x-2 mb-2 text-xl'><i className="fa-solid fa-dollar-sign"></i>{listing.price} / Nights</h1>
             <p className='text-gray-600'>Price before taxes</p>
           </div>
           <div className="border-2"></div>
-          <div className="btn mt-8">
-            <button className='w-full py-2 bg-red-500 text-white text-center text-xl rounded-md'>Reserve</button>
+          
+          <div className="btn mt-2">
+            <button  className='w-full py-2 bg-red-500 text-white text-center text-xl rounded-md'>Reserve</button>
           </div>
           <p className='text-center pt-2'>You cant't be change yet</p>
         </div>

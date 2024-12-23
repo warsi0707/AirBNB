@@ -89,6 +89,7 @@ listingRouter.delete("/:id",userAuth,async(req, res) =>{
         })
     }
 })
+
 module.exports = {
     listingRouter
 }
