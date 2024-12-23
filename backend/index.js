@@ -18,13 +18,14 @@ app.use(express.json())
 app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, "build")))
-app.get("*",(req, res)=>{
-    res.sendFile(path.join(__dirname, 'build', 'index.html'))
-})
 
 app.use("/v1/api/listings", listingRouter)
 app.use("/v1/api/user",userRouter)
 app.use("/v1/api/admin", adminRouter)
+
+app.get("*",(req, res)=>{
+    res.sendFile(path.join(__dirname, 'build', 'index.html'))
+})
 
 
 const Main =async()=>{
