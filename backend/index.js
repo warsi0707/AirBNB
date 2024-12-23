@@ -22,7 +22,9 @@ app.use(cookieParser());
 app.use("/v1/api/listings", listingRouter)
 app.use("/v1/api/user",userRouter)
 app.use("/v1/api/admin", adminRouter)
-
+app.get("/",(req, res)=>{
+    res.send("Hello world")
+})
 app.get("*",(req, res)=>{
     res.sendFile(path.join(__dirname, 'build', 'index.html'))
 })
