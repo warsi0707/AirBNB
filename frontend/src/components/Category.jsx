@@ -8,8 +8,6 @@ export default function Category() {
       <button className='text-lg cursor-not-allowed'><i className="fa-solid fa-umbrella-beach"></i><h1>Beachfront</h1></button>
       <button className='text-md cursor-not-allowed'><i className="fa-solid fa-person-shelter"></i><h1>Rooms</h1></button>
       <button className='text-lg cursor-not-allowed'><i className="fa-solid fa-warehouse"></i><h1>Tree House</h1></button>
-     
-     
     </div>
   )
 }

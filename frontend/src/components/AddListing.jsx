@@ -14,11 +14,11 @@ export default function AddListing() {
     const [loading, setLoading] = useRecoilState(loadingAtom)
     const [error, setError] = useRecoilState(errorAtom)
     const navigate = useNavigate()
-
+   
     const AddListing =async(e)=>{
         e.preventDefault()
         try{
-            const respone = await fetch("https://air-bnb-liart.vercel.app/v1/api/listings",{
+            const respone = await fetch("http://localhost:3000//v1/api/listings",{
                 method: "POST",
                 credentials: "include",
                 headers: {

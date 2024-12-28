@@ -11,8 +11,10 @@ import { authenticatedAtom } from "./atom/atom";
 import Edit from "./components/Edit";
 import ErrorPage from "./components/ErrorPage";
 
+
 function App() {
   const isAuthenticated = useRecoilValue(authenticatedAtom)
+ 
   return (
     <>
     <Router>

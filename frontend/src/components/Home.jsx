@@ -3,6 +3,7 @@ import Category from './Category'
 import { Link } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import { listingData } from '../atom/atom'
+import Loading from './Loading'
 
 export default function Home() {
   const [data, setData] = useRecoilState(listingData)
@@ -10,7 +11,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const AllListing =async()=>{
     try{
-      const response = await fetch("https://air-bnb-liart.vercel.app/v1/api/listings",{
+      const response = await fetch("http://localhost:3000/v1/api/listings",{
         method: "GET",
       })
       const result = await response.json()
@@ -27,6 +28,12 @@ export default function Home() {
   useEffect(()=>{
     AllListing()
   },[])
+
+  if(loading){
+    return <>
+   <Loading/>
+    </>
+  }
   return (
     <>
    <Category/>

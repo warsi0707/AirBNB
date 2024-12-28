@@ -2,13 +2,15 @@ import React, { useEffect, useState } from 'react'
 import {useNavigate, useParams} from "react-router"
 import { Link } from 'react-router'
 import { useRecoilState } from 'recoil'
-import { errorAtom, listingAtom, messageAtom} from '../atom/atom'
+import { errorAtom, listingAtom, loadingAtom, messageAtom} from '../atom/atom'
+import Loading from './Loading'
 
 
 export default function Details() {
   const [listing, setListing] = useRecoilState(listingAtom)
   const [message, setMessage] = useRecoilState(messageAtom)
   const [error, setError] = useRecoilState(errorAtom)
+  const [loading, setLoading] = useRecoilState(loadingAtom)
 
   const {id} = useParams()
   const navigate = useNavigate()
@@ -16,12 +18,13 @@ export default function Details() {
 
   const Getadata =async()=>{
     try{
-      const response = await fetch(`https://air-bnb-liart.vercel.app/v1/api/listings/${id}`,{
+      const response = await fetch(`http://localhost:3000/v1/api/listings/${id}`,{
         method: "GET"
       })
       const result = await response.json()
       if(response.ok){
         setListing(result.listing)
+        setLoading(false)
       }
     }catch(err){
       setError(err)
@@ -29,7 +32,7 @@ export default function Details() {
   }
   const DeleteListing =async()=>{
     try{
-      const response = await fetch(`https://air-bnb-liart.vercel.app/v1/api/listings/${id}`,{
+      const response = await fetch(`http://localhost:3000/v1/api/listings/${id}`,{
         method: "DELETE",
         credentials: "include"
       })
@@ -50,6 +53,12 @@ export default function Details() {
   useEffect(()=>{
     Getadata() 
   },[])
+
+  if(loading){
+    return <>
+    <Loading/>
+    </>
+  }
   return (
     <div className=' flex justify-center flex-col mx-5 md:mx-20 py-5'>
            {message && <h1 className='text-center bg-green-300 w-52 md:w-80 mx-auto my-2 py-1.5 md:py-2 text-xl rounded-xl text-white'>{message}</h1>}

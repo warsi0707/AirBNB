@@ -14,7 +14,7 @@ export default function Signup() {
   const Signup =async(e)=>{
     e.preventDefault()
     try{
-      const response = await fetch("https://air-bnb-liart.vercel.app/v1/api/user/signup",{
+      const response = await fetch("http://localhost:3000/v1/api/user/signup",{
         method: "POST",
         credentials: "include",
         headers: {

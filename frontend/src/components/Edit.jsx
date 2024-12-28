@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { errorAtom, loadingAtom, messageAtom } from '../atom/atom'
 import {useNavigate, useParams} from "react-router-dom"
+import Loading from './Loading'
 
 export default function Edit() {
     const [title, setTitle] = useState("")
@@ -18,7 +19,7 @@ export default function Edit() {
     const {id} = useParams()
 
     const GetData = async()=>{
-        const response = await fetch(`https://air-bnb-liart.vercel.app/v1/api/listings/${id}`,{
+        const response = await fetch(`http://localhost:3000/v1/api/listings/${id}`,{
             method: "GET",
             credentials: "include"
         })
@@ -39,7 +40,7 @@ export default function Edit() {
     const EditListing =async(e)=>{
         e.preventDefault()
         try{
-            const respone = await fetch(`https://air-bnb-liart.vercel.app/v1/api/listings/${id}`,{
+            const respone = await fetch(`http://localhost:3000/v1/api/listings/${id}`,{
                 method: "PUT",
                 credentials: "include",
                 headers: {
@@ -68,7 +69,11 @@ export default function Edit() {
             setError(error.message)
         }
     }
-
+    if(loading){
+        return <>
+        <Loading/>
+        </>
+    }
   return (
     <div className='h-full'>
     {message && <h1 className='text-center bg-green-300 w-52 md:w-80 mx-auto my-2 py-1.5 md:py-2 text-xl rounded-xl text-white'>{message}</h1>}
