@@ -9,9 +9,11 @@ export default function Home() {
   const [data, setData] = useRecoilState(listingData)
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(true)
+  const backendUrl =import.meta.env.VITE_BACKEND_URL
+
   const AllListing =async()=>{
     try{
-      const response = await fetch("http://localhost:3000/v1/api/listings",{
+      const response = await fetch(`${backendUrl}`,"/v1/api/listings",{
         method: "GET",
       })
       const result = await response.json()
