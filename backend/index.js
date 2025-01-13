@@ -14,7 +14,7 @@ app.use(cors({
     origin: process.env.FRONTEND_URL,
     credentials: true
 }))
-app.use(express.static(path.join(__dirname, "../frontend/dist")))
+app.use(express.static(path.join(__dirname, "./frontend/dist")))
 app.use(express.json())
 app.use(cookieParser());
 
@@ -26,7 +26,7 @@ app.use("/v1/api/user", userRouter)
 app.use("/v1/api/admin", adminRouter)
 
 app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'))
+    res.sendFile(path.join(__dirname, './frontend/dist/index.html'))
 })
 
 const Main = async () => {
