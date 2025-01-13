@@ -14,6 +14,7 @@ import {
 import Loading from "./Loading";
 import { BackendUrl } from "../helper";
 
+
 export default function Details() {
   const [listing, setListing] = useRecoilState(listingAtom);
   const [message, setMessage] = useRecoilState(messageAtom);
@@ -32,6 +33,7 @@ export default function Details() {
         method: "GET",
         credentials: "include",
       });
+   
       const result = await response.json();
       if (response.ok) {
         setListing(result.listing);
@@ -55,6 +57,8 @@ export default function Details() {
           setMessage("");
           navigate("/");
         }, 2000);
+      }else{
+        setError(result.message)
       }
     } catch (error) {
       setError(error.message);

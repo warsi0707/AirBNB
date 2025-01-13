@@ -5,7 +5,7 @@ import { useRecoilState } from 'recoil'
 import { errorAtom, listingData, messageAtom } from '../atom/atom'
 import Loading from './Loading'
 import { BackendUrl } from '../helper'
-
+import axios from "axios"
 export default function Home() {
   const [data, setData] = useRecoilState(listingData)
   const [error, setError] = useRecoilState(errorAtom)
@@ -15,13 +15,11 @@ export default function Home() {
 
   const AllListing =async()=>{
     try{
-      const response = await fetch(`${backendUrl}/v1/api/listings`,{
-        method: "GET",
-      })
-      const result = await response.json()
+      const response = await axios.get(`${backendUrl}/v1/api/listings`)
+      const result =  response.data
       setLoading(true)
-      if(response.ok){
-        setMessage(result.message)
+      if(response){
+        setMessage(response.message)
         setLoading(false)
         setData(result.listings)
       }
