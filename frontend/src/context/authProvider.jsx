@@ -1,44 +1,41 @@
+import React, { useEffect } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { authenticatedAtom, userAtom, userEmailAtom } from "../atom/atom";
+import AuthContext from "./AuthContext";
+import { BackendUrl } from "../helper";
 
+export default function AuthProvider({ children }) {
+  const [isAuthenticated, setIsAuthenticated] =
+    useRecoilState(authenticatedAtom);
+  const setUsername = useSetRecoilState(userAtom);
+  const setUserEmail = useSetRecoilState(userEmailAtom);
+  const backendUrl = BackendUrl;
 
-import React, { useEffect } from 'react'
-import { useRecoilState } from 'recoil'
-import { authenticatedAtom, userAtom, userEmailAtom } from '../atom/atom'
-import AuthContext from './AuthContext'
-
-
-
-export default function AuthProvider({children}) {
-  const [isAuthenticated, setIsAuthenticated] = useRecoilState(authenticatedAtom)
-  const [username, setUsername] = useRecoilState(userAtom)
-  const [userEmail, setUserEmail] = useRecoilState(userEmailAtom)
-
-
-  useEffect(()=>{
-    const verifyLogin =async()=>{
-      const response = await fetch("http://localhost:3000/v1/api/user/auth",{
+  useEffect(() => {
+    const verifyLogin = async () => {
+      const response = await fetch(`${backendUrl}/v1/api/user/auth`, {
         method: "GET",
-        credentials: "include"
-      })
-      const result = await response.json()
-      if(result.authenticated === true){
-        setIsAuthenticated(true)
-        setUserEmail(result.user.email)
-        setUsername(result.user.username)
-      }else{
-        setIsAuthenticated(false)
-        setUserEmail("")
-        setUsername("")
+        credentials: "include",
+      });
+      const result = await response.json();
+      if (result.authenticated === true) {
+        setIsAuthenticated(true);
+        setUserEmail(result.user.email);
+        setUsername(result.user.username);
+      } else {
+        setIsAuthenticated(false);
+        setUserEmail("");
+        setUsername("");
       }
-    }
-    verifyLogin()
-  },[])
+    };
+    verifyLogin();
+  }, []);
 
-  
   return (
     <div>
-     <AuthContext.Provider value={{isAuthenticated, setIsAuthenticated}}>
-      {children}
-     </AuthContext.Provider>
+      <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+        {children}
+      </AuthContext.Provider>
     </div>
-  )
+  );
 }

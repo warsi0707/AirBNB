@@ -2,24 +2,26 @@ import React, { useEffect, useState } from 'react'
 import Category from './Category'
 import { Link } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
-import { listingData } from '../atom/atom'
+import { errorAtom, listingData, messageAtom } from '../atom/atom'
 import Loading from './Loading'
+import { BackendUrl } from '../helper'
 
 export default function Home() {
   const [data, setData] = useRecoilState(listingData)
-  const [error, setError] = useState(false)
+  const [error, setError] = useRecoilState(errorAtom)
   const [loading, setLoading] = useState(true)
-  const backendUrl =import.meta.env.VITE_BACKEND_URL
+  const [message, setMessage] = useRecoilState(messageAtom)
+  const backendUrl =BackendUrl
 
   const AllListing =async()=>{
     try{
-      const response = await fetch(`${backendUrl}`,"/v1/api/listings",{
+      const response = await fetch(`${backendUrl}/v1/api/listings`,{
         method: "GET",
       })
       const result = await response.json()
-      console.log(result)
       setLoading(true)
       if(response.ok){
+        setMessage(result.message)
         setLoading(false)
         setData(result.listings)
       }
@@ -40,6 +42,8 @@ export default function Home() {
     <>
    <Category/>
    {loading? <h1>Loading...</h1>: ""}
+   {message && <h1 className='text-center bg-green-300 w-52 md:w-80 mx-auto my-2 py-1.5 md:py-2 text-xl rounded-xl text-white'>{message}</h1>}
+   {error && <h1 className='text-center bg-red-300 w-52 md:w-80 mx-auto my-2 py-1.5 md:py-2 text-xl rounded-xl text-white'>{error}</h1> }
     <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-5 lg:grid-cols-3  xl:grid-cols-4 '>
       {data.map((item)=>(
       <div key={item._id} className='h-auto w-auto px-5 sm:w-72 md:w-[400px] lg:w-96 xl:w-80 sm:mx-auto rounded-xl'>

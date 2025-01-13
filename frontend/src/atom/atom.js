@@ -1,5 +1,4 @@
-import {atom, selector} from "recoil"
-
+import { atom, selector } from "recoil"
 
 export const listingData = atom({
     key: "listingData",
@@ -17,6 +16,7 @@ export const emaildAtom = atom({
     key: "email",
     default: ""
 })
+
 export const messageAtom = atom({
     key: "message",
     default: ""
@@ -35,11 +35,11 @@ export const authenticatedAtom = atom({
 })
 export const authenticatedSelector = selector({
     key: "authenticatedSelector",
-    get: ({get})=>{
-        const isAuthenticated= get(authenticatedAtom)
-        if(isAuthenticated){
+    get: ({ get }) => {
+        const isAuthenticated = get(authenticatedAtom)
+        if (isAuthenticated) {
             return true
-        }else return false
+        } else return false
     }
 })
 export const userMenuAtom = atom({
@@ -51,7 +51,7 @@ export const userAtom = atom({
     key: "userAtom",
     default: ""
 })
-export const userEmailAtom =atom({
+export const userEmailAtom = atom({
     key: "userEmailAtom",
     default: ""
 })
@@ -64,4 +64,43 @@ export const ownerAtom = atom({
     default: ""
 })
 
-
+export const ratingAtom = atom({
+    key: "ratingAtom",
+    default: 3
+})
+export const commentAtom = atom({
+    key: "commentAtom",
+    default: ""
+})
+export const reviewAtom = atom({
+    key: "reviewAtom",
+    default: []
+})
+export const listingOwnerAtom = atom({
+    key: "listingOwnerAtom",
+    default: ""
+})
+export const titleAtom = atom({
+    key: "titleAtom",
+    default: ""
+})
+export const imageAtom = atom({
+    key: "imageAtom",
+    default: ""
+})
+export const priceAtom = atom({
+    key: "priceAtom",
+    default: 0
+})
+export const descriptionAtom = atom({
+    key: "descriptionAtom",
+    default: ""
+})
+export const bedsAtom = atom({
+    key: "bedsAtom",
+    default: 0
+})
+export const guestsAtom = atom({
+    key: "guestsAtom",
+    default: 0
+})

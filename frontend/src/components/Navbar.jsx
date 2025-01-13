@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil'
-import { authenticatedAtom, errorAtom, userAtom, userEmailAtom, userMenuAtom } from '../atom/atom'
+import { authenticatedAtom, errorAtom, messageAtom, userAtom, userEmailAtom, userMenuAtom } from '../atom/atom'
 import { useNavigate } from 'react-router-dom'
+import { BackendUrl } from '../helper'
 
 export default function Navbar() {
     const [hamberg, setHamberg] = useState(false)
-    const [message, setMessage] = useState("")
+    const [message, setMessage] = useRecoilState(messageAtom)
     const [isAuthenticated, setIsAuthenticated] = useRecoilState(authenticatedAtom)
   
     const setError = useSetRecoilState(errorAtom)
@@ -14,6 +15,8 @@ export default function Navbar() {
     const username = useRecoilValue(userAtom)
     const userEmail = useRecoilValue(userEmailAtom)
     const navigate = useNavigate()
+    const backendUrl = BackendUrl
+
     const HandleHamberg =()=>{
         setHamberg(!hamberg)
     }
@@ -22,7 +25,7 @@ export default function Navbar() {
     }
     const Logout = async()=>{
         try{
-            const response = await fetch("http://localhost:3000/v1/api/user/logout",{
+            const response = await fetch(`${backendUrl}/v1/api/user/logout`,{
                 method: "POST",
                 credentials: "include"
             })
