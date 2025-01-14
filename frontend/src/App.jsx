@@ -25,7 +25,7 @@ function App() {
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/signin" element={<Signin/>}/>
         <Route path="/listing/:id" element={<Edit/>}/>
-        {isAuthenticated? <Route path="/add"  element={<AddListing/>}/>: ""}
+       <Route path="/add"  element={isAuthenticated? <AddListing/>: <Signin/>}/>
         <Route path="*" element={<ErrorPage/>}/>
       </Routes>
       <Footer/>
