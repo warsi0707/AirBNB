@@ -9,15 +9,13 @@ const path = require("path")
 const app = express()
 const cors = require("cors")
 
-
-
 app.use(cors({
     origin: process.env.FRONTEND_URL,
     credentials: true
 }))
-app.use(express.static(path.join(__dirname, "dist")))
 app.use(express.json())
 app.use(cookieParser());
+app.use(express.static(path.join(__dirname,"frontend","dist")))
 
 app.get("/", (req, res) => {
     res.send("Hello world")
@@ -27,7 +25,7 @@ app.use("/v1/api/user", userRouter)
 app.use("/v1/api/admin", adminRouter)
 
 app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'))
+    res.sendFile(path.resolve(__dirname, 'frontend','dist', 'index.html'))
 })
 
 const Main = async () => {
