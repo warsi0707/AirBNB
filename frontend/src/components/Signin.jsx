@@ -30,6 +30,7 @@ export default function Signin() {
         body: JSON.stringify({ username, password }),
       });
       const result = await response.json();
+      console.log(result)
       setLoading(true);
       if (response.ok) {
         setMessage(result.message);
@@ -40,8 +41,8 @@ export default function Signin() {
           setMessage("");
         }, 2000);
       } else {
-        setError(result.message);
-        setError(result.validationMessage);
+    setError(result.message)
+        setError(result.validationMessage)
         setTimeout(() => {
           setError("");
         }, 3000);
@@ -52,20 +53,17 @@ export default function Signin() {
   };
   return (
     <div className="h-screen">
-      {message && (
+      {message && 
         <h1 className="text-center bg-green-300 w-52 md:w-80 mx-auto my-2 py-1.5 md:py-2 text-xl rounded-xl text-white">
           {message}
         </h1>
-      )}
-
-      {error &&
-        error.map((item) => (
-          <div key={item._id}>
+      }
+      {error  &&
             <h1 className="text-center bg-red-300 w-52 md:w-80 mx-auto my-2 py-1.5 md:py-2 text-xl rounded-xl text-white">
-              {item}
+              {error}
             </h1>
-          </div>
-        ))}
+        }
+        
       <div className="w-auto md:w-[600px] mx-auto my-10 bg-white rounded-2xl">
         <h1 className="text-2xl text-center py-5">Signin</h1>
         <div className="border-b-2"></div>

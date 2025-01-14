@@ -30,17 +30,13 @@ export default function Navbar() {
                 credentials: "include"
             })
             const result = await response.json()
+            console.log(result)
             if(response.ok){
                 setIsAuthenticated(false)
                 setMessage(result.message)
                 setTimeout(() => {
                     setMessage("")
                     navigate("/")
-                }, 2000);
-            }else{
-                setError(result.message)
-                setTimeout(() => {
-                    setError("")
                 }, 2000);
             }
         }catch(error){
@@ -71,7 +67,7 @@ export default function Navbar() {
                 </h1>
             </div>
         </nav>
-        {message && <h1 className='text-center bg-red-300 w-52 md:w-80 mx-auto my-2 py-1.5 md:py-2 text-xl rounded-xl text-white'>{message}</h1>}
+        {/* {message && <h1 className='text-center bg-red-300 w-52 md:w-80 mx-auto my-2 py-1.5 md:py-2 text-xl rounded-xl text-white'>{message}</h1>} */}
         {hamberg? <>
         <div className="hamberg w-64 py-4  bg-white rounded-xl shadow-xl  absolute right-5  mx-auto my-1 md:absolute sm:right-24 md:my-1 ">
             {!isAuthenticated? <>
