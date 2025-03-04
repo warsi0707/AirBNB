@@ -1,19 +1,16 @@
 import { useRecoilState } from "recoil";
 import {
-  errorAtom,
   loadingAtom,
-  messageAtom,
   passwordAtom,
   usernameAtom,
 } from "../atom/atom";
 import { useNavigate } from "react-router-dom";
 import { BackendUrl } from "../helper";
+import toast from "react-hot-toast";
 
 export default function Signin() {
   const [username, setUsername] = useRecoilState(usernameAtom);
   const [password, setPassword] = useRecoilState(passwordAtom);
-  const [error, setError] = useRecoilState(errorAtom);
-  const [message, setMessage] = useRecoilState(messageAtom);
   const [loading, setLoading] = useRecoilState(loadingAtom);
   const backendUrl = BackendUrl;
   const navigate = useNavigate();
@@ -21,7 +18,7 @@ export default function Signin() {
   const Signin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${backendUrl}/v1/api/user/signin`, {
+      const response = await fetch(`${backendUrl}/user/signin`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -33,39 +30,22 @@ export default function Signin() {
       console.log(result)
       setLoading(true);
       if (response.ok) {
-        setMessage(result.message);
+        toast.success(result.message)
         setLoading(false);
-        setError("");
         setTimeout(() => {
           navigate("/");
-          setMessage("");
         }, 2000);
       } else {
-    setError(result.message)
-        setError(result.validationMessage)
-        setTimeout(() => {
-          setError("");
-        }, 3000);
+        toast.error(result.validationMessage)
       }
     } catch (err) {
-      setError(err);
+      toast(err.message);
     }
   };
   return (
-    <div className="h-screen">
-      {message && 
-        <h1 className="text-center bg-green-300 w-52 md:w-80 mx-auto my-2 py-1.5 md:py-2 text-xl rounded-xl text-white">
-          {message}
-        </h1>
-      }
-      {error  &&
-            <h1 className="text-center bg-red-300 w-52 md:w-80 mx-auto my-2 py-1.5 md:py-2 text-xl rounded-xl text-white">
-              {error}
-            </h1>
-        }
-        
+    <div className="h-screen"> 
       <div className="w-auto md:w-[600px] mx-auto my-10 bg-white rounded-2xl">
-        <h1 className="text-2xl text-center py-5">Signin</h1>
+        <h1 className="py-5 text-2xl text-center">Signin</h1>
         <div className="border-b-2"></div>
         <div className="p-10">
           <h1 className="pb-5 text-2xl">Welcome to Airbnb</h1>
@@ -94,7 +74,7 @@ export default function Signin() {
               <button
                 type="submit"
                 onClick={Signin}
-                className="bg-red-600 text-xl text-white w-full p-3 my-2 rounded-xl hover:bg-red-700"
+                className="w-full p-3 my-2 text-xl text-white bg-red-600 rounded-xl hover:bg-red-700"
               >
                 {loading ? "Signing" : "signin..."}
               </button>

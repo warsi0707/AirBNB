@@ -86,7 +86,8 @@ userRouter.get("/auth", userAuth, async (req, res) => {
         if (user) {
             return res.json({
                 authenticated: true,
-                user: user
+                username: user.username,
+                email: user.email
             })
         }
         if (user === "") {

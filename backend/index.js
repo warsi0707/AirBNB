@@ -20,9 +20,9 @@ app.use(express.static(path.join(__dirname,"frontend","dist")))
 app.get("/", (req, res) => {
     res.send("Hello world")
 })
-app.use("/v1/api/listings", listingRouter)
-app.use("/v1/api/user", userRouter)
-app.use("/v1/api/admin", adminRouter)
+app.use("/api/v1/listings", listingRouter)
+app.use("/api/v1/user", userRouter)
+app.use("/api/v1/admin", adminRouter)
 
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, 'frontend','dist', 'index.html'))

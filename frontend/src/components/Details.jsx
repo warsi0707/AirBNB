@@ -4,21 +4,18 @@ import { Link } from "react-router";
 import { useRecoilState } from "recoil";
 import {
   commentAtom,
-  errorAtom,
   listingAtom,
   loadingAtom,
-  messageAtom,
   ratingAtom,
   reviewAtom,
 } from "../atom/atom";
 import Loading from "./Loading";
 import { BackendUrl } from "../helper";
+import toast from "react-hot-toast";
 
 
 export default function Details() {
   const [listing, setListing] = useRecoilState(listingAtom);
-  const [message, setMessage] = useRecoilState(messageAtom);
-  const [error, setError] = useRecoilState(errorAtom);
   const [loading, setLoading] = useRecoilState(loadingAtom);
   const [rate, setRate] = useRecoilState(ratingAtom);
   const [comment, setComment] = useRecoilState(commentAtom);
@@ -29,7 +26,7 @@ export default function Details() {
 
   const Getadata = async () => {
     try {
-      const response = await fetch(`${backendUrl}/v1/api/listings/${id}`, {
+      const response = await fetch(`${backendUrl}/listings/${id}`, {
         method: "GET",
         credentials: "include",
       });
@@ -40,33 +37,32 @@ export default function Details() {
         setLoading(false);
       }
     } catch (err) {
-      setError(err);
+      toast.error(err.message);
     }
   };
   const DeleteListing = async () => {
     try {
-      const response = await fetch(`${backendUrl}/v1/api/listings/${id}`, {
+      const response = await fetch(`${backendUrl}/listings/${id}`, {
         method: "DELETE",
         credentials: "include",
       });
       const result = await response.json();
       if (response.ok) {
-        setMessage(result.message);
+        toast.success(result.message);
         setListing(result.listing);
         setTimeout(() => {
-          setMessage("");
           navigate("/");
         }, 2000);
       }else{
-        setError(result.message)
+        toast.error(result.message)
       }
     } catch (error) {
-      setError(error.message);
+      toast.error(error.message);
     }
   };
   const Review = async (e) => {
     e.preventDefault();
-    const response = await fetch(`${backendUrl}/v1/api/listings/${id}`, {
+    const response = await fetch(`${backendUrl}/listings/${id}`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -76,27 +72,23 @@ export default function Details() {
     });
     const result = await response.json();
     if (response.ok) {
-      setMessage(result.message);
+      toast.success(result.message);
       setRate("");
       setComment("");
       setTimeout(() => {
-        setMessage("");
-        setError("");
         navigate(`/detail/${id}`);
       }, 3000);
     } else {
-      setError(result.message);
-      setError(result.validationMessage);
+      toast.error(result.message);
+      toast.error(result.validationMessage);
       setTimeout(() => {
-        setError("");
-        setMessage("");
         navigate(`/detail/${id}`);
       }, 3000);
     }
   };
   const GetReview = async () => {
     const response = await fetch(
-      `${backendUrl}/v1/api/listings/ratings/${id}`,
+      `${backendUrl}/listings/ratings/${id}`,
       {
         method: "GET",
         credentials: "include",
@@ -111,7 +103,7 @@ export default function Details() {
   };
   const DeleteReview = async (reviewId) => {
     const response = await fetch(
-      `${backendUrl}/v1/api/listings/${id}/reviews/${reviewId}`,
+      `${backendUrl}/listings/${id}/reviews/${reviewId}`,
       {
         method: "DELETE",
         credentials: "include",
@@ -119,13 +111,12 @@ export default function Details() {
     );
     const result = await response.json();
     if (response.ok) {
-      setMessage(result.message);
+      toast.success(result.message);
       setTimeout(() => {
-        setMessage("");
         navigate(`/detail/${id}`);
       }, 2000);
     } else {
-      setError(result.message);
+      toast.error(result.message);
     }
   };
   useEffect(() => {
@@ -141,33 +132,21 @@ export default function Details() {
     );
   }
   return (
-    <div className=" flex justify-center flex-col mx-5 md:mx-20 py-5">
-      {message && (
-        <h1 className="text-center bg-green-300 w-52 md:w-80 mx-auto my-2 py-1.5  md:py-2 text-2xl rounded-xl text-black font-bold">
-          {message}
-        </h1>
-      )}
-
-      {error && (
-        <h1 className="text-center bg-red-500 w-52 md:w-80 mx-auto my-2 py-1.5 md:py-2 text-xl rounded-xl text-black font-bold">
-          {error}
-        </h1>
-      )}
-
+    <div className="flex flex-col justify-center py-5 mx-5 md:mx-20">
       <div className="flex justify-between py-5">
         <h1 className="text-3xl">{listing.title}</h1>
         <h1 className="text-lg">
-          <i className="fa-regular fa-heart space-x-5"></i>&nbsp; &nbsp;save
+          <i className="space-x-5 fa-regular fa-heart"></i>&nbsp; &nbsp;save
         </h1>
       </div>
       <div className="img ">
         <img
           src={listing.image}
-          className=" h-96 object-cover w-full rounded-2xl"
+          className="object-cover w-full h-96 rounded-2xl"
           alt=""
         />
       </div>
-      <div className="details flex flex-col sm:flex-row sm:justify-between md:justify-evenly my-10">
+      <div className="flex flex-col my-10 details sm:flex-row sm:justify-between md:justify-evenly">
         <div className="detail">
           <div className="py-6">
             <h1 className="text-2xl">{listing.title} in india</h1>
@@ -175,29 +154,29 @@ export default function Details() {
               {listing.guests} Guests, {listing.bedrooms} Bedroom,{" "}
             </p>
           </div>
-          <div className="borde border-b-2"></div>
+          <div className="border-b-2 borde"></div>
           <div className="py-6">
             <h1>Hosted By: {listing.hostedBy} </h1>
           </div>
-          <div className="btn flex gap-5 mb-7 justify-center sm:justify-start">
+          <div className="flex justify-center gap-5 btn mb-7 sm:justify-start">
             <Link
               to={`/listing/${listing._id}`}
-              className="bg-black text-white py-1 px-7 text-xl rounded-md "
+              className="py-1 text-xl text-white bg-black rounded-md px-7 "
             >
               Edit
             </Link>
             <button
               onClick={DeleteListing}
-              className="bg-red-500 text-white py-1 px-7 text-xl rounded-md "
+              className="py-1 text-xl text-white bg-red-500 rounded-md px-7 "
             >
               Delete
             </button>
           </div>
-          <div className="borde border-b-2"></div>
+          <div className="border-b-2 borde"></div>
           {review.map((item) => (
             <div
               key={item._id}
-              className="flex flex-col justify-left my-2 bg-white px-2 rounded-md mb-2"
+              className="flex flex-col px-2 my-2 mb-2 bg-white rounded-md justify-left"
             >
               <div className="flex justify-between gap-2 text-lg">
                 <div className="flex flex-col gap-1">
@@ -205,7 +184,7 @@ export default function Details() {
                   <p>Comment: {item.comment}</p>
                 </div>
                 <button onClick={() => DeleteReview(item._id)}>
-                  <i className="fa-solid fa-trash text-sm"></i>
+                  <i className="text-sm fa-solid fa-trash"></i>
                 </button>
               </div>
               <div>
@@ -214,16 +193,16 @@ export default function Details() {
             </div>
           ))}
 
-          <div className="borde border-b-2"></div>
-          <div className="rating my-5 flex gap-5 mb-7 justify-center sm:justify-start">
+          <div className="border-b-2 borde"></div>
+          <div className="flex justify-center gap-5 my-5 rating mb-7 sm:justify-start">
             <form onSubmit={Review} className="flex flex-col w-full gap-2 ">
-              <div className="w-full flex flex-col">
+              <div className="flex flex-col w-full">
                 <label htmlFor="rate">Rate </label>
                 <input
                   value={rate}
                   onChange={(e) => setRate(e.target.value)}
                   name="rate"
-                  className="border-2 border-gray-300 p-2 text-xl pl-2 rounded-md"
+                  className="p-2 pl-2 text-xl border-2 border-gray-300 rounded-md"
                   type="range"
                   min="0"
                   max="5"
@@ -233,14 +212,14 @@ export default function Details() {
               <input
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
-                className="border-2 border-gray-300 p-2 text-xl pl-2 rounded-md"
+                className="p-2 pl-2 text-xl border-2 border-gray-300 rounded-md"
                 name="comment"
                 type="text"
                 placeholder="Comment "
               />
               <button
                 type="submit"
-                className="bg-red-500 text-white py-1 px-7 text-xl rounded-md hover:bg-red-600"
+                className="py-1 text-xl text-white bg-red-500 rounded-md px-7 hover:bg-red-600"
               >
                 Review
               </button>
@@ -248,9 +227,9 @@ export default function Details() {
           </div>
         </div>
 
-        <div className="price w-auto h-72 sm:w-60 py-5 shadow-xl mx-auto mt-10 sm:mt-10 bg-white rounded-xl border-2 border-gray-200 p-5">
+        <div className="w-auto p-5 py-5 mx-auto mt-10 bg-white border-2 border-gray-200 shadow-xl price h-72 sm:w-60 sm:mt-10 rounded-xl">
           <div className="mb-4">
-            <h1 className="space-x-2 mb-2 text-xl">
+            <h1 className="mb-2 space-x-2 text-xl">
               <i className="fa-solid fa-dollar-sign"></i>
               {listing.price} / Nights
             </h1>
@@ -258,12 +237,12 @@ export default function Details() {
           </div>
           <div className="border-2"></div>
 
-          <div className="btn mt-2">
-            <button className="w-full py-2 bg-red-500 text-white text-center text-xl rounded-md">
+          <div className="mt-2 btn">
+            <button className="w-full py-2 text-xl text-center text-white bg-red-500 rounded-md">
               Reserve
             </button>
           </div>
-          <p className="text-center pt-2">You cant't be change yet</p>
+          <p className="pt-2 text-center">You cant`t be change yet</p>
         </div>
       </div>
     </div>

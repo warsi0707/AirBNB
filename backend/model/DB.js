@@ -21,12 +21,18 @@ const listingSchema = new mongoose.Schema({
     image: String,
     price: Number,
     description: String,
-    hostedBy: String,
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    },
     bedrooms: Number,
     review: [{
         rate: Number,
         comment: String,
-        rateBy: String
+        rateBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref : 'User'
+        }
     }],
     guests: Number
 })

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { authenticatedAtom, userAtom, userEmailAtom } from "../atom/atom";
 import AuthContext from "./AuthContext";
@@ -13,7 +13,7 @@ export default function AuthProvider({ children }) {
 
   useEffect(() => {
     const verifyLogin = async () => {
-      const response = await fetch(`${backendUrl}/v1/api/user/auth`, {
+      const response = await fetch(`${backendUrl}/user/auth`, {
         method: "GET",
         credentials: "include",
       });
