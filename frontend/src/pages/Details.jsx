@@ -4,7 +4,7 @@ import { BackendUrl } from "../helper";
 import { memo, useRef } from "react";
 import Ratings from "../components/Ratings";
 import useReview from "../hooks/useReview";
-import useListingDelete from "../hooks/UseListingDelete";
+import useListingDelete from "../hooks/useListingDelete";
 import toast from "react-hot-toast";
 
 
