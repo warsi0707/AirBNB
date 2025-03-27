@@ -55,3 +55,10 @@ To set up the Airbnb on your local machine, follow these steps:
   - bcrypt: For password hashing.
   - cors: For connect backend and frontend
   - Cookies: For storing the token
+
+
+## Screenshots
+
+![alt text]({B5DBCDE3-A7F1-497F-98F0-1FC8D4F5A9FD}.png)
+
+![alt text]({E306B630-7241-4D1E-B525-53AE2A1C4B79}.png)
