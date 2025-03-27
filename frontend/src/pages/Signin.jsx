@@ -1,22 +1,20 @@
-import { useRecoilState } from "recoil";
-import {
-  loadingAtom,
-  passwordAtom,
-  usernameAtom,
-} from "../atom/atom";
 import { useNavigate } from "react-router-dom";
 import { BackendUrl } from "../helper";
 import toast from "react-hot-toast";
+import { memo, useCallback, useRef } from "react";
+import UserInput from "../components/UserInput";
+import LoginButton from "../components/LoginButton";
 
-export default function Signin() {
-  const [username, setUsername] = useRecoilState(usernameAtom);
-  const [password, setPassword] = useRecoilState(passwordAtom);
-  const [loading, setLoading] = useRecoilState(loadingAtom);
+ function Signin() {
+  const usernameRef = useRef()
+  const passwordRef = useRef()
   const backendUrl = BackendUrl;
   const navigate = useNavigate();
 
-  const Signin = async (e) => {
+  const Signin = useCallback(async (e) => {
     e.preventDefault();
+    const username = usernameRef.current.value;
+    const password = passwordRef.current.value;
     try {
       const response = await fetch(`${backendUrl}/user/signin`, {
         method: "POST",
@@ -27,11 +25,8 @@ export default function Signin() {
         body: JSON.stringify({ username, password }),
       });
       const result = await response.json();
-      console.log(result)
-      setLoading(true);
       if (response.ok) {
         toast.success(result.message)
-        setLoading(false);
         setTimeout(() => {
           navigate("/");
         }, 2000);
@@ -41,7 +36,7 @@ export default function Signin() {
     } catch (err) {
       toast(err.message);
     }
-  };
+  },[backendUrl,navigate])
   return (
     <div className="h-screen"> 
       <div className="w-auto md:w-[600px] mx-auto my-10 bg-white rounded-2xl">
@@ -50,38 +45,21 @@ export default function Signin() {
         <div className="p-10">
           <h1 className="pb-5 text-2xl">Welcome to Airbnb</h1>
           <div>
-            <form>
-              <input
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                type="text"
-                className="w-full p-3.5 rounded-t-lg  hover:rounded-lg border-b-0  border-2 "
-                placeholder="Username"
-              />
-              <input
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                type="password"
-                className="w-full p-3.5 rounded-b-lg hover:rounded-lg border-2 "
-                placeholder="Password"
-              />
+             <div className="flex flex-col gap-1">
+             <UserInput placeholder={"Username"} type={"text"} refs={usernameRef}/>
+             <UserInput placeholder={"Password"} type={"password"} refs={passwordRef} />
+             </div>
               <h1 className="py-3">
                 Already an account,{" "}
                 <a href="" className="underline">
                   Login
                 </a>
               </h1>
-              <button
-                type="submit"
-                onClick={Signin}
-                className="w-full p-3 my-2 text-xl text-white bg-red-600 rounded-xl hover:bg-red-700"
-              >
-                {loading ? "Signing" : "signin..."}
-              </button>
-            </form>
+              <LoginButton onclick={Signin} type={"Signin"}/>
           </div>
         </div>
       </div>
     </div>
   );
 }
+export default memo(Signin)

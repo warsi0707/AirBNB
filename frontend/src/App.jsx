@@ -1,19 +1,19 @@
 import {BrowserRouter as Router,  Routes, Route } from "react-router-dom";
-import Home from "./components/Home";
-import Navbar from "./components/Navbar";
-import Details from "./components/Details";
-import Signup from "./components/Signup";
-import Signin from "./components/Signin";
+import Home from "./pages/Home";
+import Navbar from "./pages/Navbar";
+import Details from "./pages/Details";
+import Signup from "./pages/Signup";
+import Signin from "./pages/Signin";
 import Footer from "./components/Footer";
-import AddListing from "./components/AddListing";
-import { useRecoilValue } from "recoil";
-import { authenticatedAtom } from "./atom/atom";
-import Edit from "./components/Edit";
+import AddListing from "./pages/AddListing";
+import Edit from "./pages/Edit";
 import ErrorPage from "./components/ErrorPage";
+import { useContext } from "react";
+import AuthContext from "./context/AuthContext";
 
 
 function App() {
-  const isAuthenticated = useRecoilValue(authenticatedAtom)
+  const {isAuthenticated} = useContext(AuthContext)
  
   return (
     <>
@@ -30,7 +30,6 @@ function App() {
       </Routes>
       <Footer/>
     </Router>
-      
     </>
   )
 }

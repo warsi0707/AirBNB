@@ -26,17 +26,28 @@ const listingSchema = new mongoose.Schema({
         ref: "User"
     },
     bedrooms: Number,
-    review: [{
-        rate: Number,
-        comment: String,
-        rateBy: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref : 'User'
-        }
-    }],
+    // review: [{
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "Rating"
+    // }],
     guests: Number
 })
-
+const ratings = new mongoose.Schema({
+    rate: {
+        type: Number,
+        required: true
+    },
+    comment: String,
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    },
+    listingId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Listings"
+    }
+})
+const Rating = mongoose.model("Rating", ratings)
 const Admin = mongoose.model("Admin", adminSchema)
 const User = mongoose.model("User", userSchema)
 const Listings = mongoose.model("Listing", listingSchema)
@@ -44,5 +55,6 @@ const Listings = mongoose.model("Listing", listingSchema)
 module.exports = {
     Admin,
     User,
-    Listings
+    Listings,
+    Rating
 }

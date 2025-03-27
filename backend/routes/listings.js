@@ -1,6 +1,6 @@
 const Router = require("express")
 const listingRouter = Router()
-const { Listings, User } = require("../model/DB")
+const { Listings, User, Rating } = require("../model/DB")
 const { userAuth } = require("../middleware/auth")
 const InputValidation = require("../middleware/inputValidation")
 const { ReviewSchema, ListingSchema } = require("../model/Schema")
@@ -123,21 +123,19 @@ listingRouter.delete("/:id", userAuth, async (req, res) => {
     }
 })
 // review
-listingRouter.post("/:id", userAuth, async (req, res) => {
+listingRouter.post("/rate/:id", userAuth, async (req, res) => {
     const { id } = req.params;
     const userId = req.user
     const { rate, comment } = req.body;
     try {
-        const findListing = await Listings.findById(id)
-        if (findListing) {
-            findListing.review.push({
-                rate: rate,
-                comment: comment,
-                rateBy: userId
-            })
-            findListing.save()
-        }
+        const review = await Rating.create({
+            rate,
+            comment,
+            user: userId,
+            listingId: id
+        })
             return res.json({
+                review: review,
                 message: "Thanks for rate"
             })
     } catch (error) {
@@ -146,18 +144,18 @@ listingRouter.post("/:id", userAuth, async (req, res) => {
         })
     }
 })
-listingRouter.get("/ratings/:id", async (req, res) => {
+listingRouter.get("/rate/:id", async (req, res) => {
     const { id } = req.params;
     try {
-        const findReview = await Listings.findById(id)
-        console.log(findReview)
-        if (findReview.review === "") {
+        const listingId = await Listings.findById(id)
+        const findReview =await Rating.find({listingId: listingId}).populate('user','username')
+        if (findReview == null) {
             return res.json({
-                review: ""
+                review: null
             })
         } else {
             return res.json({
-                review: findReview.review
+                review: findReview
             })
         }
     } catch (error) {
@@ -166,32 +164,28 @@ listingRouter.get("/ratings/:id", async (req, res) => {
         })
     }
 })
-listingRouter.delete("/:id/reviews/:reviewId", userAuth, async (req, res) => {
-    const { id, reviewId } = req.params;
+listingRouter.delete("/rate/:id/:reviewid", userAuth, async (req, res) => {
+    const { id, reviewid } = req.params;
     const userId = req.user
-    console.log("userid", userId)
     try {
-        const user = await User.findById(userId)
-        const review = await Listings.findById(id)
-        const reviewOwner = review.review.map((item) => item.rateBy)
-        console.log(reviewOwner)
-        if (reviewOwner == userId) {
-            await Listings.findByIdAndUpdate(
-            id,
-            {
-                $pull: { review: { _id: reviewId } }
-            }
-        )
+       const listing = await Listings.findById(id)
+       const review = await Rating.findById(reviewid)
+       if(review){
+        if(userId == review.user){
+            const dltreview = await Rating.findByIdAndDelete(reviewid)
             return res.json({
-               message: "Review deleted!"
-            })
-        }else{
+               message: "Comment Deleted"
+           })
+           }else{
             return res.json({
-                message: "Not own rating"
-            })
-        }
-        
-        
+                message: "Not Allowed"
+           })
+           }
+       }else{
+        return res.json({
+            message: "error"
+        })
+       } 
     } catch (error) {
         res.status(404).json({
             message: error.message

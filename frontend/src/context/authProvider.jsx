@@ -1,18 +1,15 @@
-import { useEffect } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { authenticatedAtom, userAtom, userEmailAtom } from "../atom/atom";
+import { useCallback, useEffect, useState } from "react";
 import AuthContext from "./AuthContext";
 import { BackendUrl } from "../helper";
 
 export default function AuthProvider({ children }) {
-  const [isAuthenticated, setIsAuthenticated] =
-    useRecoilState(authenticatedAtom);
-  const setUsername = useSetRecoilState(userAtom);
-  const setUserEmail = useSetRecoilState(userEmailAtom);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [username, setUsername] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const backendUrl = BackendUrl;
 
-  useEffect(() => {
-    const verifyLogin = async () => {
+
+    const verifyLogin = useCallback( async() => {
       const response = await fetch(`${backendUrl}/user/auth`, {
         method: "GET",
         credentials: "include",
@@ -20,20 +17,22 @@ export default function AuthProvider({ children }) {
       const result = await response.json();
       if (result.authenticated === true) {
         setIsAuthenticated(true);
-        setUserEmail(result.user.email);
-        setUsername(result.user.username);
+        setUserEmail(result.email);
+        setUsername(result.username);
       } else {
         setIsAuthenticated(false);
         setUserEmail("");
         setUsername("");
       }
-    };
-    verifyLogin();
+    },[])
+   
+    useEffect(() => {
+      verifyLogin();
   }, []);
 
   return (
     <div>
-      <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+      <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, username,userEmail }}>
         {children}
       </AuthContext.Provider>
     </div>

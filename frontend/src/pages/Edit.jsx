@@ -1,34 +1,22 @@
-import  { useEffect } from "react";
-import { useRecoilState } from "recoil";
-import {
-  bedsAtom,
-  descriptionAtom,
-  guestsAtom,
-  imageAtom,
-  loadingAtom,
-  priceAtom,
-  titleAtom,
-} from "../atom/atom";
+import  { memo, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Loading from "./Loading";
 import { BackendUrl } from "../helper";
 import toast from "react-hot-toast";
 
-export default function Edit() {
-  const [title, setTitle] = useRecoilState(titleAtom);
-  const [image, setImage] = useRecoilState(imageAtom);
-  const [price, setPrice] = useRecoilState(priceAtom);
-  const [description, setDescription] = useRecoilState(descriptionAtom);
-  const [beds, setBeds] = useRecoilState(bedsAtom);
-  const [guest, setGuest] = useRecoilState(guestsAtom);
-  const [loading, setLoading] = useRecoilState(loadingAtom);
-  const navigate = useNavigate();
+ function Edit() {
   const { id } = useParams();
+  const [title, setTitle] = useState("");
+  const [image, setImage] = useState("");
+  const [price, setPrice] = useState();
+  const [description, setDescription] = useState();
+  const [bedrooms, setBeds] = useState();
+  const [guests, setGuest] = useState();
+  const navigate = useNavigate();
   const backendUrl = BackendUrl;
-
+  
   const GetData = async () => {
     const response = await fetch(
-      `http://localhost:3000/listings/${id}`,
+      `${backendUrl}/listings/${id}`,
       {
         method: "GET",
         credentials: "include",
@@ -54,18 +42,12 @@ export default function Edit() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ title, image, price, description, beds, guest }),
+        body: JSON.stringify({ title, image, price, description, bedrooms, guests }),
       });
       const result = await respone.json();
       if (respone.ok) {
-        setLoading(false);
+        // setLoading(false);
         toast.success(result.message);
-        setTitle("");
-        setImage("");
-        setPrice("");
-        setDescription("");
-        setBeds();
-        setGuest();
         setTimeout(() => {
           navigate(`/detail/${id}`);
         }, 2000);
@@ -82,13 +64,7 @@ export default function Edit() {
   useEffect(() => {
     GetData();
   }, []);
-  if (loading) {
-    return (
-      <>
-        <Loading />
-      </>
-    );
-  }
+  
   return (
     <div className="h-full">
       <div className="bg-white rounded-md  max-w-[700px] mx-auto my-2 p-5">
@@ -149,7 +125,7 @@ export default function Edit() {
                   Guests
                 </label>
                 <input
-                  value={guest}
+                  value={guests}
                   onChange={(e) => setGuest(e.target.value)}
                   type="number"
                   className="w-full px-3 py-2 rounded-md text-md"
@@ -161,7 +137,7 @@ export default function Edit() {
                   Beds
                 </label>
                 <input
-                  value={beds}
+                  value={bedrooms}
                   onChange={(e) => setBeds(e.target.value)}
                   type="number"
                   className="w-full px-3 py-2 rounded-md text-md"
@@ -181,3 +157,4 @@ export default function Edit() {
     </div>
   );
 }
+export default memo(Edit)
