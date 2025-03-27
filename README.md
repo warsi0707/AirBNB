@@ -1,4 +1,4 @@
-# AIRBNB
+# AIRBNB 
 
 ## About the project
 
@@ -21,7 +21,7 @@ To set up the Airbnb on your local machine, follow these steps:
 
 2. **Install Dependecies**:
     ```bash
-    npm i
+    npm install
     ```
 
 3. **Run the Application**:
