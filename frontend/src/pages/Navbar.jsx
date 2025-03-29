@@ -6,7 +6,8 @@ import toast from "react-hot-toast";
 import AuthContext from "../context/AuthContext";
 function Navbar() {
   const [hamberg, setHamberg] = useState(false);
-  const { isAuthenticated, setIsAuthenticated, username, userEmail } = useContext(AuthContext);
+  const { isAuthenticated, setIsAuthenticated, username, userEmail } =
+    useContext(AuthContext);
   const [userMneu, setUserMenu] = useState(false);
   const navigate = useNavigate();
   const backendUrl = BackendUrl;
@@ -26,8 +27,8 @@ function Navbar() {
       const result = await response.json();
       if (response.ok) {
         setIsAuthenticated(false);
-        setUserMenu(false)
-        setHamberg(false)
+        setUserMenu(false);
+        setHamberg(false);
         toast.success(result.message);
         setTimeout(() => {
           navigate("/");
@@ -64,7 +65,7 @@ function Navbar() {
           )}
 
           {/* <h1><i className="hidden mt-3 text-lg fa-solid fa-globe sm:block"></i></h1> */}
-          <h1 className="flex gap-4 p-4 px-4 transition-all border border-gray-300 rounded-full shadow-sm hover:ease-in-out ">
+          <h1 className="flex gap-4 p-4 px-4 transition-all duration-300 border border-gray-300 rounded-full shadow-md hover:ease-in-out hover:shadow-xl hover:bg-red-400 hover:text-white hover:scale-105 hover:shadow-gray-500">
             <button onClick={HandleHamberg}>
               <i className="fa-solid fa-bars "></i>
             </button>
@@ -120,12 +121,19 @@ function Navbar() {
       {userMneu ? (
         <>
           <div className="absolute w-64 py-4 mx-auto my-1 bg-white shadow-xl hamberg rounded-xl right-5 md:absolute sm:right-24 md:my-1 ">
-            <h1 className="w-full hover:bg-gray-100 p-1.5 px-5 text-black  py-2">
-              Username: {username}
-            </h1>
-            <h1 className="w-full hover:bw-full hover:bg-gray-100 p-1.5 px-5 text-gray-800  py-2">
-              Email: {userEmail}
-            </h1>
+            <div>
+              <h1 className="w-full hover:bg-gray-100 p-1.5 px-5 text-black  py-2">
+                Username: {username}
+              </h1>
+              <h1 className="w-full hover:bw-full hover:bg-gray-100 p-1.5 px-5 text-gray-800  py-2">
+                Email: {userEmail}
+              </h1>
+            </div>
+            <div className="border border-gray-600"></div>
+            <div className="flex flex-col items-start justify-start py-2 text-start">
+              <Link to={"/bookings"} className="w-full px-5 py-2 text-black hover:bg-gray-100 text-start"><i className="fa-solid fa-bell-concierge"></i>Bookings</Link>
+              <Link to={"/save"} className="w-full px-5 py-2 text-black hover:bg-gray-100 text-start"><i className="fa-solid fa-heart"></i> Listing</Link>
+            </div>
           </div>
         </>
       ) : (

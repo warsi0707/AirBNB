@@ -4,9 +4,13 @@ const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
     password: String,
     email: String,
-    savedListing: [{
+    saved: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Listing"
+        ref: "SaveListing"
+    }],
+    bookings  :[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Booking"
     }]
 })
 const adminSchema = new mongoose.Schema({
@@ -47,6 +51,37 @@ const ratings = new mongoose.Schema({
         ref: "Listings"
     }
 })
+const saveListing = new mongoose.Schema({
+    listing : {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Listing"
+    },
+    user: {
+         type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    },
+    savedAt : {
+        type: Date,
+        default: Date.now
+    }
+})
+const bookings = new mongoose.Schema({
+    listing : {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Listing"
+    },
+    user : {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    },
+    bookedAt : {
+        type: Date,
+        default: Date.now
+    }
+
+})
+const Booking = mongoose.model("Booking", bookings)
+const SaveListing = mongoose.model("SaveListing", saveListing)
 const Rating = mongoose.model("Rating", ratings)
 const Admin = mongoose.model("Admin", adminSchema)
 const User = mongoose.model("User", userSchema)
@@ -56,5 +91,7 @@ module.exports = {
     Admin,
     User,
     Listings,
-    Rating
+    Rating,
+    Booking,
+    SaveListing
 }

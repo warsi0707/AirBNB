@@ -51,19 +51,53 @@ function Details() {
         toast.error(result.message)
     }
 }
+const SaveListing =async()=>{
+  try{
+    const response = await fetch(`${BackendUrl}/listings/save/${id}`, {
+      method: "POST",
+      credentials: 'include'
+    })
+    const result =await response.json()
+    if(response.ok){
+      toast.success(result.message)
+    }else{
+      toast.error(result.message)
+    }
+  }catch(error){
+    toast.error(error.message)
+  }
+}
+const ReservListing =async()=>{
+  try{
+    const response = await fetch(`${BackendUrl}/listings/booking/${id}`, {
+      method: "POST",
+      credentials: 'include'
+    })
+    const result = await response.json()
+    if(response.ok){
+      toast.success(result.message)
+    }else{
+      toast.error(result.message)
+    }
+  }catch(error){
+    toast.error(error.message)
+  }
+}
 
   return (
     <div className="flex flex-col justify-center py-5 mx-5 md:mx-20">
       <div className="flex justify-between py-5">
         <h1 className="text-3xl">{listing.title}</h1>
-        <h1 className="text-lg">
-          <i className="space-x-5 fa-regular fa-heart"></i>&nbsp; &nbsp;save
-        </h1>
+        <p className="text-lg">
+          <button onClick={SaveListing}>
+          <i className="space-x-5 transition duration-300 ease-in fa-regular fa-heart hover:cursor-pointer hover:scale-150"></i>&nbsp; &nbsp;save
+          </button>
+        </p>
       </div>
       <div className="img ">
         <img
           src={`${listing.image}`}
-          className="object-cover w-full h-96 rounded-2xl"
+          className="object-cover w-full transition-all duration-300 ease-in h-96 rounded-2xl hover:shadow-lg hover:scale-105 hover:shadow-gray-600"
           alt=""
         />
       </div>
@@ -79,16 +113,16 @@ function Details() {
           <div className="py-6">
             <h1>Hosted By: {owner}</h1>
           </div>
-          <div className="flex justify-center gap-5 btn mb-7 sm:justify-start">
+          <div className="flex justify-center gap-5 btn mb-7 sm:justify-start ">
             <Link
               to={`/listing/${listing._id}`}
-              className="py-1 text-xl text-white bg-black rounded-md px-7 "
+              className="py-1 text-xl text-white transition-all duration-300 ease-in-out bg-black rounded-md px-7 hover:shadow-xl hover:shadow-gray-500 hover:scale-110"
             >
               Edit
             </Link>
             <button
               onClick={DeleteListing}
-              className="py-1 text-xl text-white bg-red-500 rounded-md px-7 "
+              className="py-1 text-xl text-white transition-all duration-300 bg-red-500 rounded-md px-7 hover:shadow-xl hover:shadow-red-400 hover:scale-105"
             >
               Delete
             </button>
@@ -123,7 +157,7 @@ function Details() {
               <button
                 onClick={PostReview}
                 type="submit"
-                className="py-1 text-xl text-white bg-red-500 rounded-md px-7 hover:bg-red-600"
+                className="py-1 text-xl text-white transition-all duration-300 bg-red-500 rounded-md px-7 hover:bg-red-600 hover:shadow-xl hover:scale-105 hover:shadow-red-200"
               >
                 Review
               </button>
@@ -142,7 +176,7 @@ function Details() {
           <div className="border-2"></div>
 
           <div className="mt-2 btn">
-            <button className="w-full py-2 text-xl text-center text-white bg-red-500 rounded-md">
+            <button onClick={ReservListing} className="w-full py-2 text-xl text-center text-white transition-all duration-300 ease-in bg-red-500 rounded-md hover:shadow-xl hover:shadow-red-300 hover:scale-110">
               Reserve
             </button>
           </div>

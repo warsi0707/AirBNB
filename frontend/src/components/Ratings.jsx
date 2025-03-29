@@ -11,7 +11,7 @@ function Ratings({rate, comment, user,onclick}) {
         <p>Comment: {comment}</p>
       </div>
       <button onClick={onclick}>
-        <i className="text-sm fa-solid fa-trash"></i>
+        <i className="text-sm transition-all duration-300 fa-solid fa-trash hover:scale-150"></i>
       </button>
     </div>
     <div>

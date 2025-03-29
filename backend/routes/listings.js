@@ -1,6 +1,6 @@
 const Router = require("express")
 const listingRouter = Router()
-const { Listings, User, Rating } = require("../model/DB")
+const { Listings, User, Rating, SaveListing, Booking } = require("../model/DB")
 const { userAuth } = require("../middleware/auth")
 const InputValidation = require("../middleware/inputValidation")
 const { ReviewSchema, ListingSchema } = require("../model/Schema")
@@ -192,6 +192,53 @@ listingRouter.delete("/rate/:id/:reviewid", userAuth, async (req, res) => {
         })
     }
 
+})
+
+//Saving listing
+listingRouter.post("/save/:id", userAuth, async(req, res)=>{
+    const {id} = req.params;
+    const userId = req.user;
+    try{
+        const savedListing = await SaveListing.find({listing: id})
+        const savedListingId = savedListing.map((item)=> item.listing)
+        if(savedListingId == id){
+            return res.json({
+                message: "Already saved"
+            })
+        }
+        const save =await SaveListing.create({
+            listing: id,
+            user: userId
+        })
+    return res.json({
+        message: "Successfully Saved"
+    })
+    }catch(error){
+        res.json({
+            message: error.message
+        })
+    }
+    
+})
+
+
+//bookings
+listingRouter.post("/booking/:id",userAuth, async(req, res)=>{
+    const {id} = req.params;
+    const userId = req.user;
+    try{
+        const booking = await Booking.create({
+            listing: id,
+            user: userId
+        })
+        return res.json({
+            message: "Successfully Booked your listing"
+        })
+    }catch(error){
+        res.json({
+            message: error.message
+        })
+    }
 })
 module.exports = {
     listingRouter

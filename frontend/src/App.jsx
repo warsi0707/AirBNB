@@ -10,6 +10,8 @@ import Edit from "./pages/Edit";
 import ErrorPage from "./components/ErrorPage";
 import { useContext } from "react";
 import AuthContext from "./context/AuthContext";
+import SavedListings from "./pages/SavedListings";
+import YourBookings from "./pages/YourBookings";
 
 
 function App() {
@@ -26,6 +28,8 @@ function App() {
         <Route path="/signin" element={<Signin/>}/>
         <Route path="/listing/:id" element={<Edit/>}/>
         <Route path="/add"  element={isAuthenticated? <AddListing/>: <Signin/>}/>
+        <Route path="/save"  element={isAuthenticated? <SavedListings/>: <Signin/>}/>
+        <Route path="/bookings"  element={isAuthenticated? <YourBookings/>: <Signin/>}/>
         <Route path="*" element={<ErrorPage/>}/>
       </Routes>
       <Footer/>

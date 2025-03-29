@@ -1,6 +1,6 @@
 const Router = require("express");
 const userRouter = Router()
-const { Review, Listings, User } = require("../model/DB");
+const { Review, Listings, User, SaveListing, Booking } = require("../model/DB");
 const { JWT_USER_SECRET } = require("../config")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken");
@@ -116,6 +116,71 @@ userRouter.post("/logout", userAuth, (req, res) => {
         message: "Logout"
     })
 })
+//Your saved listings
+userRouter.get("/saved", userAuth, async(req, res)=>{
+    const userId = req.user;
+    try{
+        const savedListing = await SaveListing.find({user: userId}).populate("listing",'title').populate("user","username")
+        if(savedListing.length <= 0){
+            return res.json({
+                savedListing: null
+            })
+        }
+        return res.json({
+            savedListing: savedListing,
+        })
+    }catch(error){
+        res.json({
+            message: error.message
+        })
+    }
+})
+//un-save listing 
+userRouter.delete("/save/:id", userAuth, async(req, res)=>{
+    const {id} = req.params;
+    const userId = req.user;
+    try{
+        const unsave = await SaveListing.findByIdAndDelete(id, {
+            user: userId
+        })
+        if(unsave){
+            return res.json({
+                message: "Unsaved"
+            })
+        }else{
+            return res.json({
+                message: "Failed"
+            })
+        }
+    }catch(error){
+        res.json({
+            message: error.message
+        })
+    }
+})
+
+//Your bookings
+userRouter.get("/bookings", userAuth, async(req, res)=>{
+    const userId = req.user;
+    try{
+        const bookings = await Booking.find({user: userId}).populate('listing').populate('user','username')
+        if(bookings.length == 0){
+            return res.json({
+                bookings: null
+            })
+        }
+        return res.json({
+            bookings: bookings
+        })
+    }catch(error){
+        res.json({
+            message: error.mesage
+        })
+    }
+})
+
+
+
 module.exports = {
     userRouter
 }
