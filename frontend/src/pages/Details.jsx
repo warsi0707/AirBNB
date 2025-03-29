@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import useListing from "../hooks/useListing";
 import { BackendUrl } from "../helper";
 import { memo, useRef } from "react";
@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 
 
 function Details() {
+  const navigate = useNavigate()
   const { id } = useParams();
   const { review } = useReview();
   const { listing, owner } = useListing();
@@ -76,6 +77,10 @@ const ReservListing =async()=>{
     const result = await response.json()
     if(response.ok){
       toast.success(result.message)
+      setTimeout(() => {
+        navigate("/bookings")
+      }, 2000);
+    
     }else{
       toast.error(result.message)
     }
