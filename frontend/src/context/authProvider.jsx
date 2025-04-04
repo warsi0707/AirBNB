@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import AuthContext from "./AuthContext";
 import { BackendUrl } from "../helper";
 
@@ -9,7 +9,7 @@ export default function AuthProvider({ children }) {
   const backendUrl = BackendUrl;
 
 
-    const verifyLogin = useCallback( async() => {
+    const verifyLogin =  async() => {
       const response = await fetch(`${backendUrl}/user/auth`, {
         method: "GET",
         credentials: "include",
@@ -24,7 +24,7 @@ export default function AuthProvider({ children }) {
         setUserEmail("");
         setUsername("");
       }
-    },[])
+    }
    
     useEffect(() => {
       verifyLogin();

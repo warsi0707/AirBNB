@@ -1,11 +1,11 @@
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { BackendUrl } from "../helper"
 import toast from "react-hot-toast"
-import { useCallback } from "react"
 
 export default function useListingDelete() {
     const {id} = useParams()
-    const DeleteListing =useCallback(async()=>{
+    const navigate = useNavigate()
+    const DeleteListing =async()=>{
         try{
             const response = await fetch(`${BackendUrl}/listings/${id}`,{
                 method: "DELETE",
@@ -14,13 +14,14 @@ export default function useListingDelete() {
             const result = await response.json()
             if(response.ok){
                 toast.success(result.message)
+                navigate("/")
             }else{
                 toast.error(result.message)
             }
         }catch(error){
             toast.error(error.message)
         }
-    },[])
+    }
   return {
     DeleteListing
   }

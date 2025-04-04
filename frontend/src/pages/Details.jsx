@@ -1,22 +1,22 @@
 import { Link, useNavigate, useParams } from "react-router";
 import useListing from "../hooks/useListing";
 import { BackendUrl } from "../helper";
-import { memo, useRef } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import Ratings from "../components/Ratings";
-import useReview from "../hooks/useReview";
+
 import useListingDelete from "../hooks/useListingDelete";
 import toast from "react-hot-toast";
-
+import axios from "axios";
 
 function Details() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { id } = useParams();
-  const { review } = useReview();
+  // const { review } = useReview();
   const { listing, owner } = useListing();
   const { DeleteListing } = useListingDelete();
   const rateRef = useRef(3);
   const commentRef = useRef(null);
-
+  const [review, setReview] = useState([]);
   const PostReview = async () => {
     const rate = rateRef.current.value;
     const comment = commentRef.current.value;
@@ -32,70 +32,92 @@ function Details() {
       const result = await response.json();
       if (response.ok) {
         toast.success(result.message);
-      }else{
+      } else {
         toast.error(result.message);
       }
-      
     } catch (error) {
       toast.error(error.message);
     }
   };
-  const DeleteReview= async(reviewId)=>{
-    const response = await fetch(`${BackendUrl}/listings/rate/${id}/${reviewId}`,{
-        method: "DELETE",
-        credentials: 'include'
-    })
-    const result = await response.json()
-    if(response.ok){
-        toast.success(result.message)
-    }else{
-        toast.error(result.message)
-    }
-}
-const SaveListing =async()=>{
-  try{
-    const response = await fetch(`${BackendUrl}/listings/save/${id}`, {
-      method: "POST",
-      credentials: 'include'
-    })
-    const result =await response.json()
-    if(response.ok){
-      toast.success(result.message)
-    }else{
-      toast.error(result.message)
-    }
-  }catch(error){
-    toast.error(error.message)
-  }
-}
-const ReservListing =async()=>{
-  try{
-    const response = await fetch(`${BackendUrl}/listings/booking/${id}`, {
-      method: "POST",
-      credentials: 'include'
-    })
-    const result = await response.json()
-    if(response.ok){
-      toast.success(result.message)
-      setTimeout(() => {
-        navigate("/bookings")
-      }, 2000);
+  const GetReview = useCallback(async () => {
+    try {
+      const response = await axios.get(`${BackendUrl}/listings/rate/${id}`, {
     
-    }else{
-      toast.error(result.message)
+      });
+      const result = response.data;
+      console.log(result);
+      // const result = await response.json();
+      if (response) {
+        setReview(result.review);
+      } else {
+        setReview(null);
+      }
+    } catch (error) {
+      toast.error(error.message);
     }
-  }catch(error){
-    toast.error(error.message)
-  }
-}
+  }, []);
 
+  const DeleteReview = useCallback(async (reviewId) => {
+    const response = await fetch(
+      `${BackendUrl}/listings/rate/${id}/${reviewId}`,
+      {
+        method: "DELETE",
+        credentials: "include",
+      }
+    );
+    const result = await response.json();
+    if (response.ok) {
+      toast.success(result.message);
+    } else {
+      toast.error(result.message);
+    }
+  }, []);
+  const SaveListing = async () => {
+    try {
+      const response = await fetch(`${BackendUrl}/listings/save/${id}`, {
+        method: "POST",
+        credentials: "include",
+      });
+      const result = await response.json();
+      if (response.ok) {
+        toast.success(result.message);
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+  const ReservListing = async () => {
+    try {
+      const response = await fetch(`${BackendUrl}/listings/booking/${id}`, {
+        method: "POST",
+        credentials: "include",
+      });
+      const result = await response.json();
+      if (response.ok) {
+        toast.success(result.message);
+        setTimeout(() => {
+          navigate("/bookings");
+        }, 2000);
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+  useEffect(() => {
+    GetReview();
+  }, [GetReview]);
   return (
     <div className="flex flex-col justify-center py-5 mx-5 md:mx-20">
       <div className="flex justify-between py-5">
         <h1 className="text-3xl">{listing.title}</h1>
         <p className="text-lg">
           <button onClick={SaveListing}>
-          <i className="space-x-5 transition duration-300 ease-in fa-regular fa-heart hover:cursor-pointer hover:scale-150"></i>&nbsp; &nbsp;save
+            <i className="space-x-5 transition duration-300 ease-in fa-regular fa-heart hover:cursor-pointer hover:scale-150"></i>
+            &nbsp; &nbsp;save
           </button>
         </p>
       </div>
@@ -134,7 +156,13 @@ const ReservListing =async()=>{
           </div>
           <div className="border-b-2 borde"></div>
           {review.map((item) => (
-            <Ratings key={item._id} rate={item.rete} comment={item.comment} user={item.user.username} onclick={()=>DeleteReview(item._id)}/>
+            <Ratings
+              key={item._id}
+              rate={item.rete}
+              comment={item.comment}
+              user={item.user.username}
+              onclick={() => DeleteReview(item._id)}
+            />
           ))}
 
           <div className="border-b-2 borde"></div>
@@ -181,7 +209,10 @@ const ReservListing =async()=>{
           <div className="border-2"></div>
 
           <div className="mt-2 btn">
-            <button onClick={ReservListing} className="w-full py-2 text-xl text-center text-white transition-all duration-300 ease-in bg-red-500 rounded-md hover:shadow-xl hover:shadow-red-300 hover:scale-110">
+            <button
+              onClick={ReservListing}
+              className="w-full py-2 text-xl text-center text-white transition-all duration-300 ease-in bg-red-500 rounded-md hover:shadow-xl hover:shadow-red-300 hover:scale-110"
+            >
               Reserve
             </button>
           </div>
@@ -191,4 +222,4 @@ const ReservListing =async()=>{
     </div>
   );
 }
-export default  memo(Details)
+export default memo(Details);

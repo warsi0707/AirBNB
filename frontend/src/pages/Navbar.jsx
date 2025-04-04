@@ -1,4 +1,4 @@
-import { useContext, useState, memo, useCallback } from "react";
+import { useContext, useState, memo } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { BackendUrl } from "../helper";
@@ -18,7 +18,7 @@ function Navbar() {
   const HandleUserMenu = () => {
     setUserMenu(!userMneu);
   };
-  const Logout = useCallback(async () => {
+  const Logout = async () => {
     try {
       const response = await fetch(`${backendUrl}/user/logout`, {
         method: "POST",
@@ -37,7 +37,7 @@ function Navbar() {
     } catch (error) {
       toast.error(error.message);
     }
-  }, []);
+  };
   return (
     <div>
       <nav className="flex justify-between w-full p-2 border-b-2 md:p-7">

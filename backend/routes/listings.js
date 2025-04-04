@@ -201,15 +201,17 @@ listingRouter.post("/save/:id", userAuth, async(req, res)=>{
     try{
         const savedListing = await SaveListing.find({listing: id})
         const savedListingId = savedListing.map((item)=> item.listing)
+        console.log(savedListing)
+        console.log(savedListingId)
         if(savedListingId == id){
             return res.json({
                 message: "Already saved"
             })
         }
-        const save =await SaveListing.create({
-            listing: id,
-            user: userId
-        })
+        // const save =await SaveListing.create({
+        //     listing: id,
+        //     user: userId
+        // })
     return res.json({
         message: "Successfully Saved"
     })
@@ -220,7 +222,20 @@ listingRouter.post("/save/:id", userAuth, async(req, res)=>{
     }
     
 })
+listingRouter.post("/saving/:id", userAuth, async(req, res)=>{
+    const {id} = req.params;
+    const userId = req.user;
 
+    const saving = await User.updateOne(
+        {_id: userId},
+        {$push: {
+            listing: id
+        }}
+    )
+    return res.json({
+        message: "saved"
+    })
+})
 
 //bookings
 listingRouter.post("/booking/:id",userAuth, async(req, res)=>{

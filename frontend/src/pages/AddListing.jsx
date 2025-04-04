@@ -14,7 +14,7 @@ import ListingInput from "../components/ListingInput";
   const backendUrl = BackendUrl;
   const navigate = useNavigate();
 
-  const AddListing = useCallback(async (e) => {
+  const AddListing = async (e) => {
     e.preventDefault();
     const title = titleRef.current.value
     const image = imageRef.current.value
@@ -46,7 +46,7 @@ import ListingInput from "../components/ListingInput";
     } catch (error) {
       toast.error(error.message);
     }
-  },[])
+  }
   return (
     <div className="h-full">
       <div className="bg-white rounded-md  max-w-[700px] mx-auto my-2 p-5">

@@ -5,8 +5,18 @@ const userSchema = new mongoose.Schema({
     password: String,
     email: String,
     saved: [{
+        listing : {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "SaveListing"
+        ref: "Listing"
+    },
+    user : {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    },
+    bookedAt : {
+        type: Date,
+        default: Date.now
+    }
     }],
     bookings  :[{
         type: mongoose.Schema.Types.ObjectId,

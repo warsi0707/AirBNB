@@ -8,7 +8,7 @@ export default function useListing() {
     const [listing, setListing] = useState({})
     const [owner, setOwner] = useState("")
 
-    const GetListing = useCallback( async () => {
+    const GetListing =  async () => {
         try{
             const resppnse = await fetch(`${BackendUrl}/listings/${id}`, {
                 method: "GET",
@@ -25,7 +25,7 @@ export default function useListing() {
         }catch(error){
             toast.error(error.message)
         }
-      },[])
+      }
       useEffect(()=>{
         GetListing()
       },[])

@@ -1,6 +1,5 @@
 import { memo, useCallback, useEffect, useState } from "react";
 import Category from "../components/Category";
-import { Link } from "react-router-dom";
 import Loading from "../components/Loading";
 import { BackendUrl } from "../helper";
 import axios from "axios";
@@ -11,11 +10,10 @@ import ListingCard from "../components/ListingCard";
 function Home() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const backendUrl = BackendUrl;
 
   const AllListing = useCallback(async () => {
     try {
-      const response = await axios.get(`${backendUrl}/listings`);
+      const response = await axios.get(`${BackendUrl}/listings`);
       const result = response.data;
       setLoading(true);
       if (response) {
@@ -26,9 +24,10 @@ function Home() {
       toast.err(err.message);
     }
   }, []);
+  
   useEffect(() => {
     AllListing();
-  }, []);
+  }, [AllListing]);
 
   if (loading) {
     return (

@@ -5,7 +5,7 @@ import { BackendUrl } from "../helper"
 
  function YourBookings() {
   const [listing, setListing] = useState([])
-  const Bookings =useCallback(async()=>{
+  const Bookings =async()=>{
     try{
       const response = await fetch(`${BackendUrl}/user/bookings`, {
         method: "GET",
@@ -17,7 +17,7 @@ import { BackendUrl } from "../helper"
     }catch(error){
       toast.error(error.message)
     }
-  },[])
+  }
   useEffect(()=>{
     Bookings()
   },[])

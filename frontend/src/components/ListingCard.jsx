@@ -1,5 +1,6 @@
 import { memo } from "react";
 import { Link } from "react-router-dom";
+
 function ListingCard({ id, image, title, price }) {
   return (
     <div
