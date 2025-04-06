@@ -14,7 +14,12 @@ function SavedListings() {
         credentials: 'include'
       })
       const result = await response.json()
-      setListing(result.savedListing)
+      if(response.ok){
+        setListing(result.savedListing)
+      }else{
+        setListing([])
+      }
+      
     }catch(error){
       toast.error(error.message)
     }
@@ -26,7 +31,9 @@ function SavedListings() {
         credentials: 'include'
       })
       const result = await response.json()
+
       if(response.ok){
+        GetListing()
         toast.success(result.message)
       }else{
         toast.error(result.message)
@@ -38,10 +45,10 @@ function SavedListings() {
   useEffect(()=>{
     GetListing()
   },[])
-  if(listing === null){
+  if(listing.length <=0){
     return (
       <div className="h-[60vh] flex items-center justify-center ">
-        <p className="text-5xl font-thin ">No saved listing</p>
+        <p className="text-5xl ">No saved listing</p>
       </div>
     )
   }

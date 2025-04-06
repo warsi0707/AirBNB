@@ -15,8 +15,26 @@ function Details() {
   const { listing, owner } = useListing();
   const { DeleteListing } = useListingDelete();
   const rateRef = useRef(3);
+  // const [rate, setRate] = useState(3)
   const commentRef = useRef(null);
   const [review, setReview] = useState([]);
+  
+  const GetReview = useCallback(async () => {
+    try {
+      const response = await axios.get(`${BackendUrl}/listings/rate/${id}`, {
+    
+      });
+      const result = response.data;
+      // const result = await response.json();
+      if (response) {
+        setReview(result.review || []);
+      } else {
+        setReview([]);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }, [id]);
   const PostReview = async () => {
     const rate = rateRef.current.value;
     const comment = commentRef.current.value;
@@ -31,6 +49,7 @@ function Details() {
       });
       const result = await response.json();
       if (response.ok) {
+        GetReview()
         toast.success(result.message);
       } else {
         toast.error(result.message);
@@ -39,24 +58,6 @@ function Details() {
       toast.error(error.message);
     }
   };
-  const GetReview = useCallback(async () => {
-    try {
-      const response = await axios.get(`${BackendUrl}/listings/rate/${id}`, {
-    
-      });
-      const result = response.data;
-      console.log(result);
-      // const result = await response.json();
-      if (response) {
-        setReview(result.review);
-      } else {
-        setReview(null);
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
-  }, []);
-
   const DeleteReview = useCallback(async (reviewId) => {
     const response = await fetch(
       `${BackendUrl}/listings/rate/${id}/${reviewId}`,
@@ -67,6 +68,7 @@ function Details() {
     );
     const result = await response.json();
     if (response.ok) {
+        GetReview()
       toast.success(result.message);
     } else {
       toast.error(result.message);
@@ -108,8 +110,8 @@ function Details() {
     }
   };
   useEffect(() => {
-    GetReview();
-  }, [GetReview]);
+      GetReview();
+  }, []);
   return (
     <div className="flex flex-col justify-center py-5 mx-5 md:mx-20">
       <div className="flex justify-between py-5">
@@ -158,7 +160,7 @@ function Details() {
           {review.map((item) => (
             <Ratings
               key={item._id}
-              rate={item.rete}
+              rate={item.rate}
               comment={item.comment}
               user={item.user.username}
               onclick={() => DeleteReview(item._id)}
@@ -172,6 +174,8 @@ function Details() {
                 <label htmlFor="rate">Rate </label>
                 <input
                   ref={rateRef}
+                  // value={rate}
+                  // onChange={(e)=> setRate(e.target.value)}
                   name="rate"
                   className="p-2 pl-2 text-xl border-2 border-gray-300 rounded-md"
                   type="range"

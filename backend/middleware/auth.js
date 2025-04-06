@@ -25,18 +25,25 @@ function adminAuth(req, res, next) {
 }
 function userAuth(req, res, next) {
   const userAccessToken = req.cookies.userAccessToken;
-
-  if (!userAccessToken) {
+  try {
+    if (!userAccessToken) {
+      return res.status(404).json({
+        message: "Login Required!",
+        authenticated: false
+      })
+    }
+    const decode = jwt.verify(userAccessToken, process.env.JWT_USER_SECRET)
+    if (decode) {
+      req.user = decode.user;
+      next()
+    }
+    
+  } catch (error) {
     return res.status(404).json({
-      message: "Login Required!",
-      authenticated: false
+      message: error.message
     })
   }
-  const decode = jwt.verify(userAccessToken, process.env.JWT_USER_SECRET)
-  if (decode) {
-    req.user = decode.user;
-    next()
-  }
+
 }
 
 module.exports = {

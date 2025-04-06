@@ -120,20 +120,17 @@ userRouter.post("/logout", userAuth, (req, res) => {
 userRouter.get("/saved", userAuth, async(req, res)=>{
     const userId = req.user;
     try{
-        const savedListing = await SaveListing.find({user: userId}).populate("listing",'title').populate("user","username")
-        if(savedListing.length <= 0){
-            return res.json({
-                savedListing: null
-            })
-        }
+        const savedListing = await SaveListing.find({user: userId}).populate('listing','title').populate('user','username')
         return res.json({
-            savedListing: savedListing,
+            savedListing: savedListing
         })
+        
     }catch(error){
-        res.json({
-            message: error.message
+        res.status(404).json({
+            message: error.mesage
         })
     }
+        
 })
 //un-save listing 
 userRouter.delete("/save/:id", userAuth, async(req, res)=>{
@@ -175,6 +172,26 @@ userRouter.get("/bookings", userAuth, async(req, res)=>{
     }catch(error){
         res.json({
             message: error.mesage
+        })
+    }
+})
+userRouter.delete("/bookings/:id", userAuth, async(req, res)=>{
+    const {id} = req.params;
+    const userId = req.user;
+    try{
+        const deleteBooking = await Booking.findByIdAndDelete(id,{user: userId})
+        if(deleteBooking){
+            return res.json({
+                message: "Deleted successfully"
+            })
+        }else{
+            return res.status(404).json({
+                message: "Deletaion failed"
+            })
+        }
+    }catch(error){
+        res.json({
+            message: error.message
         })
     }
 })
