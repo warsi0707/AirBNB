@@ -9,6 +9,12 @@ This project is an Airbnb-inspired platform.
 - User can rate the listings with rating and some comment
 - Also rating owner cand edit and delete there comments
 
+---
+
+## 🌐 Live Demo
+🔗 [View Live Project](https://airbnb-2-eram.onrender.com)
+
+---
 
 ## Installation 
 
@@ -29,6 +35,7 @@ To set up the Airbnb on your local machine, follow these steps:
     node index.js
     ```
 
+---
 
 ## Technologies Used
 
@@ -56,6 +63,7 @@ To set up the Airbnb on your local machine, follow these steps:
   - cors: For connect backend and frontend
   - Cookies: For storing the token
 
+---
 
 ## Screenshots
 
