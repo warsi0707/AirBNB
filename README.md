@@ -59,20 +59,21 @@ To set up the Airbnb on your local machine, follow these steps:
 
 ## Screenshots
 
-![alt text]({B5DBCDE3-A7F1-497F-98F0-1FC8D4F5A9FD}.png)
+### Homepage
+![alt text](frontend/public/screenshot/home.png)
 
-![alt text]({E306B630-7241-4D1E-B525-53AE2A1C4B79}.png)
+### Homepage 2
+![alt text](frontend/public/screenshot/home2.png)
 
 ### Detail
-
-![alt text]({0A031E7A-2180-4E2B-8D31-3CBF05E2E2C3}.png)
-
-![alt text]({28A30694-BF58-486D-B6C4-80395F0D4698}.png)
-
-### Signup
-
-![alt text]({F071D68B-8554-42ED-9032-6429B1A47B36}.png)
+![alt text](frontend/public/screenshot/details2.png)
 
 ### Signin
+![alt text](frontend/public/screenshot/signin.png)
 
-![alt text]({A2E01543-EDA1-48D7-9303-562E3140CE6C}.png)
+### Signup
+![alt text](frontend/public/screenshot/signup.png)
+
+### Rating
+![alt text](frontend/public/screenshot/rating.png)
+
