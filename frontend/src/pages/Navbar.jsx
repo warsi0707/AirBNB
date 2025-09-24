@@ -6,8 +6,7 @@ import toast from "react-hot-toast";
 import AuthContext from "../context/AuthContext";
 function Navbar() {
   const [hamberg, setHamberg] = useState(false);
-  const { isAuthenticated, setIsAuthenticated, username, userEmail } =
-    useContext(AuthContext);
+  const { isAuthenticated, setIsAuthenticated, authUser } = useContext(AuthContext);
   const [userMneu, setUserMenu] = useState(false);
   const navigate = useNavigate();
   const backendUrl = BackendUrl;
@@ -18,25 +17,17 @@ function Navbar() {
   const HandleUserMenu = () => {
     setUserMenu(!userMneu);
   };
+
   const Logout = async () => {
-    try {
-      const response = await fetch(`${backendUrl}/user/logout`, {
-        method: "POST",
-        credentials: "include",
-      });
-      const result = await response.json();
-      if (response.ok) {
-        setIsAuthenticated(false);
-        setUserMenu(false);
-        setHamberg(false);
-        toast.success(result.message);
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
-      }
-    } catch (error) {
-      toast.error(error.message);
+    const token = localStorage.getItem('token')
+    console.log(token.length)
+    if(token.length >0){
+      setIsAuthenticated(false)
+      localStorage.removeItem('token')
+      toast.success("Logout success")
+      navigate("/")
     }
+  
   };
   return (
     <div>
@@ -56,7 +47,7 @@ function Navbar() {
           </Link>
         </div>
         <div className="flex gap-2 profiles sm:gap-5 sm:mr-20">
-          {isAuthenticated ? (
+          {isAuthenticated && authUser.role === 'ADMIN' ? (
             <Link to={"/add"} className="hidden mt-4 md:block">
               Airbnb your Home
             </Link>
@@ -123,10 +114,10 @@ function Navbar() {
           <div className="absolute w-64 py-4 mx-auto my-1 bg-white shadow-xl hamberg rounded-xl right-5 md:absolute sm:right-24 md:my-1 ">
             <div>
               <h1 className="w-full hover:bg-gray-100 p-1.5 px-5 text-black  py-2">
-                Username: {username}
+                Username: 
               </h1>
               <h1 className="w-full hover:bw-full hover:bg-gray-100 p-1.5 px-5 text-gray-800  py-2">
-                Email: {userEmail}
+                Email: 
               </h1>
             </div>
             <div className="border border-gray-600"></div>

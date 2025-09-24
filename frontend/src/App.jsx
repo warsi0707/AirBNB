@@ -15,7 +15,8 @@ import YourBookings from "./pages/YourBookings";
 
 
 function App() {
-  const {isAuthenticated} = useContext(AuthContext)
+  const {isAuthenticated, authUser} = useContext(AuthContext)
+  console.log(authUser)
  
   return (
     <>
@@ -27,8 +28,7 @@ function App() {
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/signin" element={<Signin/>}/>
         <Route path="/listing/:id" element={<Edit/>}/>
-        <Route path="/add"  element={isAuthenticated? <AddListing/>: <Signin/>}/>
-        <Route path="/save"  element={isAuthenticated? <SavedListings/>: <Signin/>}/>
+        <Route path="/add"  element={isAuthenticated && authUser.role === 'ADMIN'? <AddListing/>: <Signin/>}/>
         <Route path="/bookings"  element={isAuthenticated? <YourBookings/>: <Signin/>}/>
         <Route path="*" element={<ErrorPage/>}/>
       </Routes>

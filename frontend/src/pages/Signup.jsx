@@ -1,48 +1,53 @@
 import { useNavigate } from "react-router";
 import { BackendUrl } from '../helper';
 import toast from "react-hot-toast";
-import LoginButton from "../components/LoginButton";
 import UserInput from "../components/UserInput";
-import { memo, useCallback, useRef } from "react";
-
+import { memo,  useRef } from "react";
+import { useState } from "react";
 
  function Signup() {
-  const usernameRef = useRef()
-  const emailRef = useRef()
-  const passwordRef = useRef()
+  const usernameRef = useRef('')
+  const emailRef = useRef('')
+  const passwordRef = useRef('')
   const navigate = useNavigate()
   const backendUrl = BackendUrl
+  const [loading, setLoading] = useState(false)
 
-  const Signup =useCallback(async(e)=>{
+  const Signup =async(e)=>{
     e.preventDefault()
+    
+    try{
+      setLoading(true)
     const username = usernameRef.current.value;
     const email = emailRef.current.value;
     const password = passwordRef.current.value
-    try{
-      const response = await fetch(`${backendUrl}/user/signup`,{
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json"
+    if(!username || !email || !password){
+      toast.error("All input required")
+    }
+      const response = await fetch(`${backendUrl}/auth/signup`,{
+        method: 'POST',
+        headers : {
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({username, password, email})
+        body: JSON.stringify({username, email, password})
       })
       const result = await response.json()
-      if(response.ok){
-        toast.loading(true)
-        toast.success(result.message)
-        
-        setTimeout(() => {
-          navigate("/signin")
-        }, 2000);
+      console.log(response)
+      console.log(result)
+      if(response.ok == true){
+        setLoading(false)
+        navigate("/signin")
+         toast.success(result.message)
       }else{
-        toast.error(result.message)
+        setLoading(false)
+        toast.error(result.error)
       }
     }catch(err){
+      setLoading(false)
       toast.error(err.message)
     }
     
-  },[backendUrl, navigate])
+  }
   return (
     <div className='h-screen'>
         <div className='w-auto md:w-[600px] mx-auto my-10 bg-white rounded-2xl'>
@@ -55,7 +60,7 @@ import { memo, useCallback, useRef } from "react";
                     <UserInput refs={emailRef} placeholder={"Email"} type={'email'}/>
                     <UserInput refs={passwordRef} placeholder={"Password"} type={'password'}/>
                     <h1 className='py-3'>Already an account,   <a href="" className='underline'>Login</a></h1>
-                    <LoginButton onclick={Signup} type={"Signup"}/>
+                    <button onClick={Signup} className="w-full p-3 my-2 text-xl text-white bg-red-600 rounded-xl hover:bg-red-700">{`${loading? "Loading...": "signup"}`} </button>
                 </div>
             </div>
         </div>

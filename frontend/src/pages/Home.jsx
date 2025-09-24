@@ -15,6 +15,7 @@ function Home() {
     try {
       const response = await axios.get(`${BackendUrl}/listings`);
       const result = response.data;
+      console.log(result)
       setLoading(true);
       if (response) {
         setLoading(false);
@@ -24,6 +25,7 @@ function Home() {
       toast.err(err.message);
     }
   }, []);
+  
   
   useEffect(() => {
     AllListing();
@@ -41,9 +43,9 @@ function Home() {
       <Category />
 
       {loading ? <h1>Loading...</h1> : ""}
-      <div className="grid w-[100vw] grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
+      <div className="flex flex-wrap w-full gap-5 px-10 lg:px-32 ">
         {data.map((item) => (
-          <ListingCard key={item._id} id={item._id} image={item.image} title={item.title} price={item.price} />
+          <ListingCard key={item._id} item={{...item}}  />
         ))}
       </div>
     </>

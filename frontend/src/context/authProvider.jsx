@@ -3,36 +3,41 @@ import AuthContext from "./AuthContext";
 import { BackendUrl } from "../helper";
 
 export default function AuthProvider({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [username, setUsername] = useState("");
-  const [userEmail, setUserEmail] = useState("");
+  const [authUser, setAuthUser] = useState({})
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const backendUrl = BackendUrl;
 
-
     const verifyLogin =  async() => {
-      const response = await fetch(`${backendUrl}/user/auth`, {
+      try{
+         const response = await fetch(`${backendUrl}/auth/verify`, {
         method: "GET",
         credentials: "include",
+        headers : {
+          token: localStorage.getItem('token')
+        }
       });
       const result = await response.json();
       if (result.authenticated === true) {
-        setIsAuthenticated(true);
-        setUserEmail(result.email);
-        setUsername(result.username);
+        setAuthUser(result)
+        setIsAuthenticated(true)
       } else {
-        setIsAuthenticated(false);
-        setUserEmail("");
-        setUsername("");
+        setAuthUser({})
+        setIsAuthenticated(false)
+      }
+      }catch(error){
+         setAuthUser({})
+         setIsAuthenticated(false)
+        console.error(error)
       }
     }
    
     useEffect(() => {
       verifyLogin();
-  }, []);
+  }, [isAuthenticated]);
 
   return (
     <div>
-      <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, username,userEmail }}>
+      <AuthContext.Provider value={{authUser, setAuthUser,isAuthenticated, setIsAuthenticated }}>
         {children}
       </AuthContext.Provider>
     </div>

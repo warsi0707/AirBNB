@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { BackendUrl } from "../helper";
 import toast from "react-hot-toast";
-import { memo, useCallback, useRef } from "react";
+import { memo,  useRef } from "react";
 import ListingInput from "../components/ListingInput";
 
  function AddListing() {
