@@ -48,7 +48,7 @@ function RatingInputForm({handleReviewForm}) {
     }
 
   return (
-    <div className='fixed top-0 flex items-center justify-center w-screen h-screen px-5 bg-black/70 backdrop-blur-lg'>
+    <div className='fixed top-0 left-0 z-50 flex items-center justify-center w-screen h-screen px-5 bg-black/70 backdrop-blur-lg'>
         <div className='bg-white shadow-xl w-full  lg:w-[600px] rounded-xl '>
             <div className='flex justify-between p-5 border-b-2' >
                 <h1 className='text-2xl font-semibold'>Rate Listing name adfsad</h1>

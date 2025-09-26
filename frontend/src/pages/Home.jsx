@@ -40,10 +40,8 @@ function Home() {
   }
   return (
     <>
-      <Category />
-
       {loading ? <h1>Loading...</h1> : ""}
-      <div className="flex flex-wrap w-full gap-5 px-10 lg:px-32 ">
+      <div className="flex flex-wrap w-full gap-5 px-10 pt-10 lg:px-32 ">
         {data.map((item) => (
           <ListingCard key={item._id} item={{...item}}  />
         ))}

@@ -8,8 +8,8 @@ import { IoPeopleSharp } from "react-icons/io5";
 import { IoBedSharp } from "react-icons/io5";
 import Ratings from "../components/Ratings";
 import RatingInputForm from "../components/RatingInputForm";
-import BookingsCard from "../components/BookingsCard";
 import { useCallback } from "react";
+import BookingInputForm from "../components/BookingInputForm";
 
 
 export default function Details() {
@@ -262,7 +262,7 @@ export default function Details() {
       
     </div>
     {isRating && <RatingInputForm handleReviewForm={()=>setIsRating(!isRating)}/> }
-      {isBooking && <BookingsCard listing={{...listing}} handleBookingForm={()=> setIsBooking(!isBooking)} />}
+      {isBooking && <BookingInputForm listing={{...listing}} handleBookingForm={()=> setIsBooking(!isBooking)} />}
     </div>
   );
 }

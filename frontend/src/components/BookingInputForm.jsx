@@ -1,16 +1,14 @@
 import { memo, useContext, useState } from "react";
 import BookingInput from "./BookingInput";
 import { MdOutlineCurrencyRupee } from "react-icons/md";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import toast from "react-hot-toast";
 import AuthContext from "../context/AuthContext";
 import { BackendUrl } from "../helper";
 
 
-function BookingsCard({ handleBookingForm,listing }) {
-  console.log(listing)
+function BookingInputForm({ handleBookingForm,listing }) {
   const {isAuthenticated} = useContext(AuthContext)
-  console.log(isAuthenticated)
   const {id} = useParams()
   const [formData, setFormData] = useState({
     checkIn: "",
@@ -21,6 +19,7 @@ function BookingsCard({ handleBookingForm,listing }) {
     phone: "",
     email: "",
   })
+  const navigate = useNavigate()
   const totalPrice = listing.price
 
   const handleBooking =async(e)=>{
@@ -40,6 +39,7 @@ function BookingsCard({ handleBookingForm,listing }) {
       })
       const result = await response.json()
       if(response.status ==200){
+        navigate("/bookings")
         handleBookingForm(false)
         toast.success(result.message)
       }else{
@@ -50,7 +50,7 @@ function BookingsCard({ handleBookingForm,listing }) {
     }
   }
   return (
-    <div className="fixed top-0 w-screen h-screen p-5 bg-white lg:p-10">
+    <div className="fixed top-0 left-0 z-50 w-screen h-screen p-5 bg-white lg:p-10">
       <div className="flex items-center justify-between py-5 text-xl lg:text-3xl lg:px-20">
         <h1 className="font-semibold">Booking, City Center Apartment</h1>
         <button onClick={handleBookingForm}>
@@ -126,4 +126,4 @@ function BookingsCard({ handleBookingForm,listing }) {
     </div>
   );
 }
-export default memo(BookingsCard);
+export default memo(BookingInputForm);

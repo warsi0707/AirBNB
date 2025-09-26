@@ -4,21 +4,20 @@ import { useNavigate } from "react-router-dom";
 import { BackendUrl } from "../helper";
 import toast from "react-hot-toast";
 import AuthContext from "../context/AuthContext";
+import { HiMiniBars3 } from "react-icons/hi2";
+import { RxCross1 } from "react-icons/rx";
+import { IoMdSearch } from "react-icons/io";
+
 function Navbar() {
-  const [hamberg, setHamberg] = useState(false);
   const { isAuthenticated, setIsAuthenticated, authUser } = useContext(AuthContext);
-  const [userMneu, setUserMenu] = useState(false);
+  console.log(authUser)
+  const [menu, setMenu] = useState(false);
   const navigate = useNavigate();
   const backendUrl = BackendUrl;
 
-  const HandleHamberg = () => {
-    setHamberg(!hamberg);
-  };
-  const HandleUserMenu = () => {
-    setUserMenu(!userMneu);
-  };
 
-  const Logout = async () => {
+
+  const handleLogout = async () => {
     const token = localStorage.getItem('token')
     console.log(token.length)
     if(token.length >0){
@@ -30,10 +29,10 @@ function Navbar() {
   
   };
   return (
-    <div>
-      <nav className="flex justify-between w-full p-2 border-b-2 md:p-7">
-        <div className="ml-5 logo md:ml-10">
-          <Link to={"/"} className="flex gap-2">
+    <>
+    <div className="sticky top-0 z-50 flex items-center justify-between w-full p-8 bg-white border-b">
+      <div>
+        <Link to={"/"} className="flex gap-2">
             <img
               src="/logo.png"
               width={30}
@@ -45,92 +44,41 @@ function Navbar() {
               airbnb
             </h1>
           </Link>
-        </div>
-        <div className="flex gap-2 profiles sm:gap-5 sm:mr-20">
-          {isAuthenticated && authUser.role === 'ADMIN' ? (
-            <Link to={"/add"} className="hidden mt-4 md:block">
-              Airbnb your Home
-            </Link>
-          ) : (
-            ""
-          )}
-
-          {/* <h1><i className="hidden mt-3 text-lg fa-solid fa-globe sm:block"></i></h1> */}
-          <h1 className="flex gap-4 p-4 px-4 transition-all duration-300 border border-gray-300 rounded-full shadow-md hover:ease-in-out hover:shadow-xl hover:bg-red-400 hover:text-white hover:scale-105 hover:shadow-gray-500">
-            <button onClick={HandleHamberg}>
-              <i className="fa-solid fa-bars "></i>
-            </button>
-            {isAuthenticated ? (
-              <button onClick={HandleUserMenu}>
-                <i className="mt-1 fa-regular fa-user"></i>
-              </button>
-            ) : (
-              ""
-            )}
-          </h1>
-        </div>
-      </nav>
-      {hamberg ? (
-        <>
-          <div className="absolute w-64 py-4 mx-auto my-1 bg-white shadow-xl hamberg rounded-xl right-5 md:absolute sm:right-24 md:my-1 ">
-            {!isAuthenticated ? (
-              <>
-                <h1 className="w-full hover:bg-gray-100 p-1.5 px-5 text-black hover:cursor-pointer py-2">
-                  {" "}
-                  <Link to={"/signup"}>Signup</Link>
-                </h1>
-                <h1 className="w-full hover:bw-full hover:bg-gray-100 p-1.5 px-5 text-gray-800 hover:cursor-pointer py-2">
-                  <Link to={"/signin"}>Signin</Link>
-                </h1>
-              </>
-            ) : (
-              <>
-                <h1 className="w-full hover:bw-full hover:bg-gray-100 p-1.5 px-5 text-gray-800 hover:cursor-pointer py-2">
-                  <button onClick={Logout}>Logout</button>
-                </h1>
-                <h1 className="w-full hover:bg-gray-100 p-1.5 px-5 text-gray-800 hover:cursor-pointer py-2">
-                  {isAuthenticated ? (
-                    <Link to={"/add"}>Airbnb Your Home</Link>
-                  ) : (
-                    ""
-                  )}
-                </h1>
-              </>
-            )}
-
-            <h1 className="w-full hover:bg-gray-100 p-1.5 px-5 text-gray-800 hover:cursor-pointer py-2">
-              <Link>Host</Link>
-            </h1>
-            <h1 className="w-full hover:bg-gray-100 p-1.5 px-5 text-gray-800 hover:cursor-pointer py-2">
-              <Link>Help Centre</Link>
-            </h1>
-          </div>
-        </>
-      ) : (
-        ""
-      )}
-      {userMneu ? (
-        <>
-          <div className="absolute w-64 py-4 mx-auto my-1 bg-white shadow-xl hamberg rounded-xl right-5 md:absolute sm:right-24 md:my-1 ">
-            <div>
-              <h1 className="w-full hover:bg-gray-100 p-1.5 px-5 text-black  py-2">
-                Username: 
-              </h1>
-              <h1 className="w-full hover:bw-full hover:bg-gray-100 p-1.5 px-5 text-gray-800  py-2">
-                Email: 
-              </h1>
-            </div>
-            <div className="border border-gray-600"></div>
-            <div className="flex flex-col items-start justify-start py-2 text-start">
-              <Link to={"/bookings"} className="w-full px-5 py-2 text-black hover:bg-gray-100 text-start"><i className="fa-solid fa-bell-concierge"></i>Bookings</Link>
-              <Link to={"/save"} className="w-full px-5 py-2 text-black hover:bg-gray-100 text-start"><i className="fa-solid fa-heart"></i> Listing</Link>
-            </div>
-          </div>
-        </>
-      ) : (
-        ""
-      )}
+      </div>
+      <div className="hidden lg:flex items-center p-1.5 border-2 rounded-full w-96">
+        <input type="text" className="w-full px-2 outline-none" placeholder="Type location"/>
+        <button className="p-2 text-2xl text-white bg-red-500 rounded-full"><IoMdSearch/></button>
+      </div>
+      <div>
+        {menu?  
+        <button onClick={()=> setMenu(!menu)} className="p-3 text-2xl bg-gray-200 rounded-full"><RxCross1/></button>:
+        <button  onClick={()=> setMenu(!menu)} className="p-3 text-2xl bg-gray-200 rounded-full"><HiMiniBars3/></button>
+        }
+      </div>
     </div>
+    {menu && <div className="fixed z-50 p-5 bg-white border shadow-xl right-10 top-28 w-60 lg:w-80 rounded-xl">
+      {isAuthenticated && authUser.username &&
+      <div className="py-5 border-b">
+        <p className="text-2xl font-semibold">{authUser?.username[0].toUpperCase()+ authUser?.username?.slice(1)}</p>
+      </div>}
+      {isAuthenticated && isAuthenticated &&
+      <div className="flex flex-col gap-2 py-5 border-b">
+        {authUser && authUser.role === 'ADMIN' &&
+        <Link to={"/add"} className="hover:underline">Post Your Airbnb</Link>}
+        
+        <Link to={"/bookings"} className="hover:underline">Your Bookings</Link>
+      </div>}
+      <div className="flex flex-col gap-2 py-5 ">
+        {isAuthenticated? 
+        <button onClick={handleLogout} className="flex justify-start hover:underline">Logout</button>:
+        <>
+        <Link to={"/signin"} className="hover:underline">Signin</Link>
+        <Link to={"/signup"} className="hover:underline">Signup</Link>
+        </>
+      }
+      </div>
+    </div>}
+    </>
   );
 }
 export default memo(Navbar);

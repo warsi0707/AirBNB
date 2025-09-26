@@ -10,6 +10,9 @@ export default {
         "sm": "640px",
         "md": "768px",
         "lg": "1024px"
+      },
+      colors : {
+        "slate-100": "#f3f3f2"
       }
     },
   },

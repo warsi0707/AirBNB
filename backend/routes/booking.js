@@ -8,7 +8,7 @@ bookingRouter.get("/",authChecker, async(req, res)=>{
     try{
         const bookings = await Booking.find({
             user: req.user.userId
-        }).populate('listing user',' title price location username images')
+        }).populate('listing')
         if(bookings.length ==0){
             return res.json({
                 bookings: []
@@ -26,7 +26,6 @@ bookingRouter.get("/",authChecker, async(req, res)=>{
 bookingRouter.post("/:listingId", authChecker, async(req, res)=>{
     const {listingId} = req.params;
     const {checkIn, checkOut, totalPrice,guests, firstName, lastName, phone, email} = req.body;
-    console.log(checkIn, checkOut, totalPrice,guests, firstName, lastName, phone, email)
     try{
         if(!checkIn || !checkOut || !totalPrice || !guests || !firstName || !lastName ||!phone || !email){
             return res.status(404).json({

@@ -1,20 +1,25 @@
 import { memo, useCallback, useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import { BackendUrl } from "../helper"
-import BookingsCard from "../components/BookingsCard"
+import BookingCard from "../components/BookingCard"
 
 
  function YourBookings() {
   const [listing, setListing] = useState([])
+
   const Bookings =async()=>{
     try{
-      const response = await fetch(`${BackendUrl}/user/bookings`, {
+      const response = await fetch(`${BackendUrl}/booking`, {
         method: "GET",
-        credentials: 'include'
+        credentials: 'include',
+        headers : {
+          token : localStorage.getItem('token')
+        }
       })
       const result = await response.json()
-      if(response.ok){
-
+      console.log(response)
+      console.log(result)
+      if(response.status == 200){
       setListing(result.bookings)
       }
       
@@ -48,9 +53,9 @@ import BookingsCard from "../components/BookingsCard"
     )
   }
   return (
-    <div className="flex flex-col gap-10 py-10">
-      {listing.map((item)=>(
-        <BookingsCard key={item._id} title={item.listing.title} image={item.listing.image}  description={item.listing.description} bookedAt={item.bookedAt} onclick={()=> DeleteBooking(item._id)}/>
+    <div className="flex flex-wrap justify-center w-full min-h-screen gap-10 p-5 lg:px-40 md:justify-between">
+      {listing && listing.map((item)=>(
+        <BookingCard key={item._id} item={{...item}}/>
       ))}
     </div>
   )

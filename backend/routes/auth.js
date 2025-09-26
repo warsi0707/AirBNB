@@ -11,7 +11,6 @@ const { authChecker } = require("../middleware/auth");
 
 authRouter.post("/signup",  async (req, res) => {
     const { username, password, email,adminCode } = req.body;
-     console.log("adcode: ", adminCode)
     try {
         if(!username || !password || !email){
             return res.status(404).json({
@@ -25,7 +24,7 @@ authRouter.post("/signup",  async (req, res) => {
             })
         }
         const hashPassword = await bcrypt.hash(password, 5)
-        console.log("adScret: ", ADMIN_SECRET)
+    
         
         if(adminCode === ADMIN_SECRET){
             const admin = await User.create({
@@ -145,15 +144,15 @@ authRouter.get("/verify", authChecker,  async (req, res) => {
 
 
 })
-authRouter.post("/logout",  (req, res) => {
-    res.clearCookie("userAccessToken", {
-        sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
-        secure: process.env.NODE_ENV === "Development" ? false : true,
-    })
-    res.json({
-        message: "Logout"
-    })
-})
+// authRouter.post("/logout",  (req, res) => {
+//     res.clearCookie("userAccessToken", {
+//         sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
+//         secure: process.env.NODE_ENV === "Development" ? false : true,
+//     })
+//     res.json({
+//         message: "Logout"
+//     })
+// })
 
 module.exports ={
     authRouter
