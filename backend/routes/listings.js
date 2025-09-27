@@ -1,7 +1,40 @@
 const Router = require("express")
 const listingRouter = Router()
-const { Listings} = require("../model/DB")
+const { Listings } = require("../model/DB")
 
+
+listingRouter.get("/search", async (req, res) => {
+    const { query } = req.query
+  
+    try {
+        if (query == "") {
+            return res.status(404).json({
+                error: "Input required"
+            })
+        }
+        const listing = await Listings.find(
+            {
+                $or: [
+                    { location: { $regex: query, $options: "i" } },
+                    { title: { $regex: query, $options: 'i' } }
+                ]
+            }
+        )
+        if(listing.length ==0){
+            return res.json({
+                listing: [],
+                message: "Not found"
+            })
+        }
+        return res.json({
+            listing: listing
+        })
+    } catch (error) {
+        res.status(404).json({
+            error: error
+        })
+    }
+})
 listingRouter.get("/", async (req, res) => {
     try {
         const lisitngs = await Listings.find({})
@@ -25,7 +58,7 @@ listingRouter.get("/", async (req, res) => {
 listingRouter.get("/:id", async (req, res) => {
     const { id } = req.params;
     try {
-        const listing = await Listings.findById(id).populate("ownerId","username")
+        const listing = await Listings.findById(id).populate("ownerId", "username")
         return res.json({
             listing: listing
         })
@@ -36,6 +69,7 @@ listingRouter.get("/:id", async (req, res) => {
     }
 
 })
+
 
 
 module.exports = {

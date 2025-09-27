@@ -7,15 +7,28 @@ import AuthContext from "../context/AuthContext";
 import { HiMiniBars3 } from "react-icons/hi2";
 import { RxCross1 } from "react-icons/rx";
 import { IoMdSearch } from "react-icons/io";
+import { useEffect } from "react";
 
 function Navbar() {
   const { isAuthenticated, setIsAuthenticated, authUser } = useContext(AuthContext);
-  console.log(authUser)
+  const [query, setQuery] = useState("")
   const [menu, setMenu] = useState(false);
   const navigate = useNavigate();
   const backendUrl = BackendUrl;
+  console.log(query)
 
-
+  const searchedListing =async()=>{
+      try{
+        const response = await fetch(`${backendUrl}/listings/search?query=${query}`, {
+          method: 'GET'
+        })
+        const result = await response.json()
+        console.log(response)
+        console.log(result)
+      }catch(error){
+        toast.error("failed")
+      }
+    }
 
   const handleLogout = async () => {
     const token = localStorage.getItem('token')
@@ -28,6 +41,11 @@ function Navbar() {
     }
   
   };
+  // useEffect(()=>{
+    
+  //   searchedListing()
+  // },[query])
+
   return (
     <>
     <div className="sticky top-0 z-50 flex items-center justify-between w-full p-8 bg-white border-b">
@@ -46,8 +64,8 @@ function Navbar() {
           </Link>
       </div>
       <div className="hidden lg:flex items-center p-1.5 border-2 rounded-full w-96">
-        <input type="text" className="w-full px-2 outline-none" placeholder="Type location"/>
-        <button className="p-2 text-2xl text-white bg-red-500 rounded-full"><IoMdSearch/></button>
+        <input value={query} onChange={(e)=> setQuery(e.target.value)} type="text" className="w-full px-2 outline-none" placeholder="Type location"/>
+        <button onClick={()=>searchedListing()} className="p-2 text-2xl text-white bg-red-500 rounded-full"><IoMdSearch/></button>
       </div>
       <div>
         {menu?  
