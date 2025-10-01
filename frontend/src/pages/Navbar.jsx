@@ -10,29 +10,33 @@ import { IoMdSearch } from "react-icons/io";
 import { useEffect } from "react";
 
 function Navbar() {
-  const { isAuthenticated, setIsAuthenticated, authUser } = useContext(AuthContext);
+  const { isAuthenticated, setIsAuthenticated, authUser, setListingData, setLoading } = useContext(AuthContext);
   const [query, setQuery] = useState("")
   const [menu, setMenu] = useState(false);
   const navigate = useNavigate();
   const backendUrl = BackendUrl;
-  console.log(query)
+
 
   const searchedListing =async()=>{
+    
       try{
         const response = await fetch(`${backendUrl}/listings/search?query=${query}`, {
           method: 'GET'
         })
         const result = await response.json()
-        console.log(response)
-        console.log(result)
+        setLoading(true)
+        if(response.status ==200){
+          setLoading(false)
+          setListingData(result.listing)
+        }
       }catch(error){
+        setLoading(false)
         toast.error("failed")
       }
     }
 
   const handleLogout = async () => {
     const token = localStorage.getItem('token')
-    console.log(token.length)
     if(token.length >0){
       setIsAuthenticated(false)
       localStorage.removeItem('token')
@@ -41,10 +45,10 @@ function Navbar() {
     }
   
   };
-  // useEffect(()=>{
+  useEffect(()=>{
     
-  //   searchedListing()
-  // },[query])
+    searchedListing()
+  },[query])
 
   return (
     <>

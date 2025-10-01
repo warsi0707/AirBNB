@@ -3,7 +3,6 @@ import { MdOutlineCurrencyRupee } from "react-icons/md";
 
 
 function BookingCard({item}) {
-  console.log(item)
   return (
     <div className='w-full h-full border shadow-md bg-slate-100 md:w-96 rounded-xl' >
       <div>

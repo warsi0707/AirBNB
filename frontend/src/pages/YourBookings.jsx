@@ -17,8 +17,6 @@ import BookingCard from "../components/BookingCard"
         }
       })
       const result = await response.json()
-      console.log(response)
-      console.log(result)
       if(response.status == 200){
       setListing(result.bookings)
       }

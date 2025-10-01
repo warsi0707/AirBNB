@@ -28,7 +28,6 @@ export default function Signin() {
     }
     try {
       const response = await axios.post(`${backendUrl}/auth/signin`,{username, password})
-      console.log(response)
       if(response.status ==200){
         setIsAuthenticated(true)
         setLoading(false)

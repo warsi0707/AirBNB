@@ -27,7 +27,21 @@ const userSchema = new mongoose.Schema({
         enum :['USER', 'ADMIN'], default: 'USER'
     }
 })
-
+const ratings = new mongoose.Schema({
+    rate: {
+        type: Number,
+        required: true
+    },
+    comment: String,
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    },
+    listingId: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Listings"
+    }]
+})
 const listingSchema = new mongoose.Schema({
     title: { type: String, unique: true, required: true },
     price: {type:Number, required: true},
@@ -41,26 +55,9 @@ const listingSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     },
-    reviews: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Rating"
-    }],
+    reviews: [ratings],
 })
-const ratings = new mongoose.Schema({
-    rate: {
-        type: Number,
-        required: true
-    },
-    comment: String,
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
-    },
-    listingId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Listings"
-    }
-})
+
 
 const bookings = new mongoose.Schema({
     listing : {

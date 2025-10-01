@@ -16,7 +16,8 @@ listingRouter.get("/search", async (req, res) => {
             {
                 $or: [
                     { location: { $regex: query, $options: "i" } },
-                    { title: { $regex: query, $options: 'i' } }
+                    { title: { $regex: query, $options: 'i' } },
+                    { description: { $regex: query, $options: 'i' } },
                 ]
             }
         )
@@ -58,7 +59,7 @@ listingRouter.get("/", async (req, res) => {
 listingRouter.get("/:id", async (req, res) => {
     const { id } = req.params;
     try {
-        const listing = await Listings.findById(id).populate("ownerId", "username")
+        const listing = await Listings.findById(id).populate("ownerId reviews.user", "username role")
         return res.json({
             listing: listing
         })

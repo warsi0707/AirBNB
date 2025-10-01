@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 export default function useGetReview() {
     const {id} = useParams()
     const [reviews, setReviews] = useState([])
-    console.log(reviews)
+
 
     const handleGetRate =async()=>{
         try{
@@ -19,8 +19,6 @@ export default function useGetReview() {
           }else{
             setReviews([])
           }
-          console.log(response)
-          console.log(result)
         }catch(error){
           console.error(error)
         }

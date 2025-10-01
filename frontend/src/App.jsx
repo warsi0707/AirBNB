@@ -16,7 +16,6 @@ import YourBookings from "./pages/YourBookings";
 
 function App() {
   const {isAuthenticated, authUser} = useContext(AuthContext)
-  console.log(authUser)
  
   return (
     <>

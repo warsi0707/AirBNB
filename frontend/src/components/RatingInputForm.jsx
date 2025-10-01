@@ -5,15 +5,16 @@ import  { memo } from 'react'
 import AuthContext from '../context/AuthContext'
 import toast from 'react-hot-toast'
 import { BackendUrl } from '../helper'
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 
-function RatingInputForm({handleReviewForm}) {
+function RatingInputForm({handleReviewForm,handleListing}) {
     const {authUser,isAuthenticated} = useContext(AuthContext)
     const {id} = useParams()
     const [noStar, setNostar] = useState([1,2,3,4,5])
     const [rate, setRate] = useState(3)
     const commentRef = useRef("")
+    const navigate = useNavigate()
 
     const handleRating =async(e)=>{
         e.preventDefault()
@@ -33,15 +34,13 @@ function RatingInputForm({handleReviewForm}) {
                 body: JSON.stringify({rate, comment})
             })
             const result =await response.json()
-            console.log(result)
             if(response.status ==200){
+                handleListing()
                 toast.success(result.message)
                 handleReviewForm(false)
             }else{
                 toast.error(result.error)
             }
-            console.log(response)
-            console.log(result)
         }catch(error){
             toast.error(error)
         }

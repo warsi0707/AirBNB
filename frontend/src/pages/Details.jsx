@@ -22,7 +22,7 @@ export default function Details() {
   
 
 
-  const handleListing = async () => {
+  const handleListing =useCallback( async () => {
     setLoading(true)
     try {
       const response = await fetch(`${BackendUrl}/listings/${id}`, {
@@ -39,24 +39,23 @@ export default function Details() {
     } catch (error) {
       toast.error(error);
     }
-  };
-  const handleGetRate =async()=>{
-    try{
-      const response = await fetch(`${BackendUrl}/rate/${id}`,{
-        method: 'GET'
-      })
-      const result = await response.json()
-      if(response.status == 200){
-        setReviews(result.review)
-      }else{
-        setReviews([])
-      }
-    }catch(error){
-      console.error(error)
-    }
-  }
+  },[])
+  // const handleGetRate =async()=>{
+  //   try{
+  //     const response = await fetch(`${BackendUrl}/rate/${id}`,{
+  //       method: 'GET'
+  //     })
+  //     const result = await response.json()
+  //     if(response.status == 200){
+  //       setReviews([...reviews,{rate: result.rate, comment: result.comment}])
+  //     }else{
+  //       setReviews([])
+  //     }
+  //   }catch(error){
+  //     console.error(error)
+  //   }
+  // }
   const handleDeleteRate =useCallback( async(rateId)=>{
-    console.log(rateId)
     try{
       const response = await fetch(`${BackendUrl}/rate/${id}/${rateId}`,{
         method: 'DELETE',
@@ -67,7 +66,7 @@ export default function Details() {
       })
       const result = await response.json()
       if(response.status == 200){
-        handleGetRate()
+        handleListing()
         toast.success(result.message)
       }else{
         toast.error(result.error)
@@ -77,102 +76,11 @@ export default function Details() {
     }
   },[])
  
-
-  //   try {
-  //     const response = await axios.get(`${BackendUrl}/listings/rate/${id}`, {
-
-  //     });
-  //     const result = response.data;
-  //     // const result = await response.json();
-  //     if (response) {
-  //       setReview(result.review || []);
-  //     } else {
-  //       setReview([]);
-  //     }
-  //   } catch (error) {
-  //     toast.error(error.message);
-  //   }
-  // }, [id]);
-  // const PostReview = async () => {
-  //   const rate = rateRef.current.value;
-  //   const comment = commentRef.current.value;
-  //   try {
-  //     const response = await fetch(`${BackendUrl}/listings/rate/${id}`, {
-  //       method: "POST",
-  //       credentials: "include",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ rate, comment }),
-  //     });
-  //     const result = await response.json();
-  //     if (response.ok) {
-  //       GetReview()
-  //       toast.success(result.message);
-  //     } else {
-  //       toast.error(result.message);
-  //     }
-  //   } catch (error) {
-  //     toast.error(error.message);
-  //   }
-  // };
-  // const DeleteReview = useCallback(async (reviewId) => {
-  //   const response = await fetch(
-  //     `${BackendUrl}/listings/rate/${id}/${reviewId}`,
-  //     {
-  //       method: "DELETE",
-  //       credentials: "include",
-  //     }
-  //   );
-  //   const result = await response.json();
-  //   if (response.ok) {
-  //       GetReview()
-  //     toast.success(result.message);
-  //   } else {
-  //     toast.error(result.message);
-  //   }
-  // }, []);
-  // const SaveListing = async () => {
-  //   try {
-  //     const response = await fetch(`${BackendUrl}/listings/save/${id}`, {
-  //       method: "POST",
-  //       credentials: "include",
-  //     });
-  //     const result = await response.json();
-  //     if (response.ok) {
-  //       toast.success(result.message);
-  //     } else {
-  //       toast.error(result.message);
-  //     }
-  //   } catch (error) {
-  //     toast.error(error.message);
-  //   }
-  // };
-  // const ReservListing = async () => {
-  //   try {
-  //     const response = await fetch(`${BackendUrl}/listings/booking/${id}`, {
-  //       method: "POST",
-  //       credentials: "include",
-  //     });
-  //     const result = await response.json();
-  //     if (response.ok) {
-  //       toast.success(result.message);
-  //       setTimeout(() => {
-  //         navigate("/bookings");
-  //       }, 2000);
-  //     } else {
-  //       toast.error(result.message);
-  //     }
-  //   } catch (error) {
-  //     toast.error(error.message);
-  //   }
-  // };
   useEffect(() => {
     handleListing();
-  }, [id]);
-  useEffect(()=>{
-    handleGetRate()
-  },[isRating])
+    // handleGetRate()
+  }, [id, reviews]);
+
 
   if(loading){
     return (
@@ -239,8 +147,8 @@ export default function Details() {
             <button onClick={()=> setIsRating(!isRating)} className="hover:underline hover:text-red-500">Rate us <i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></button>
         </div>
         <div className="flex flex-col gap-3">
-          {reviews && reviews.map((item)=>(
-            <Ratings key={item._id} rate={{...item}} handleDeleteRate={()=> handleDeleteRate(item._id)}/>
+          {listing.reviews && listing.reviews.map((item)=>(
+            <Ratings key={item._id} rate={{...item}} handleDeleteRate={handleDeleteRate} />
           ))}
           
         </div>
@@ -249,7 +157,7 @@ export default function Details() {
         {listing.images && (
           <img
             src={`${listing?.images[0]}`}
-            className="w-full h-[500px] rounded-3xl"
+            className="w-full  h-[500px] rounded-3xl"
             alt=""
           />
         )}
@@ -261,7 +169,7 @@ export default function Details() {
       </div>
       
     </div>
-    {isRating && <RatingInputForm handleReviewForm={()=>setIsRating(!isRating)}/> }
+    {isRating && <RatingInputForm handleReviewForm={()=>setIsRating(!isRating)} handleListing={handleListing}/>  }
       {isBooking && <BookingInputForm listing={{...listing}} handleBookingForm={()=> setIsBooking(!isBooking)} />}
     </div>
   );

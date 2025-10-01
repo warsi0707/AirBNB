@@ -5,6 +5,8 @@ import { BackendUrl } from "../helper";
 export default function AuthProvider({ children }) {
   const [authUser, setAuthUser] = useState({})
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [listingData, setListingData] = useState([])
+  const [loading, setLoading] = useState(false)
   const backendUrl = BackendUrl;
 
     const verifyLogin =  async() => {
@@ -37,7 +39,7 @@ export default function AuthProvider({ children }) {
 
   return (
     <div>
-      <AuthContext.Provider value={{authUser, setAuthUser,isAuthenticated, setIsAuthenticated }}>
+      <AuthContext.Provider value={{authUser, setAuthUser,isAuthenticated, setIsAuthenticated,listingData, setListingData,loading, setLoading }}>
         {children}
       </AuthContext.Provider>
     </div>

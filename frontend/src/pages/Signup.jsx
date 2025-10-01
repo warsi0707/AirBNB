@@ -32,8 +32,6 @@ import { useState } from "react";
         body: JSON.stringify({username, email, password})
       })
       const result = await response.json()
-      console.log(response)
-      console.log(result)
       if(response.ok == true){
         setLoading(false)
         navigate("/signin")

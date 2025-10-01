@@ -24,7 +24,7 @@ authRouter.post("/signup",  async (req, res) => {
             })
         }
         const hashPassword = await bcrypt.hash(password, 5)
-    
+        
         
         if(adminCode === ADMIN_SECRET){
             const admin = await User.create({
@@ -44,7 +44,7 @@ authRouter.post("/signup",  async (req, res) => {
             })
             }
         }
-        if (!existUser) {
+       
             const newUser = await User.create({
                 username,
                 password: hashPassword,
@@ -55,11 +55,7 @@ authRouter.post("/signup",  async (req, res) => {
                 message: `${username} signup success`,
                 user: newUser
             })
-        } else {
-            return res.status(404).json({
-                error: `${username} not signup`
-            })
-        }
+        
 
     } catch (error) {
         res.status(404).json({
@@ -79,7 +75,7 @@ authRouter.post("/signin",  async (req, res) => {
         const findUser = await User.findOne({ username })
         if (!findUser) {
             return res.status(404).json({
-                message: `${username} not found`
+                error: `${username} not found`
             })
         }
         const user = findUser ? bcrypt.compare(password, findUser.password) : false
@@ -104,7 +100,7 @@ authRouter.post("/signin",  async (req, res) => {
             })
         } else {
             return res.status(404).json({
-                message: "Username or Password not matched"
+                error: "Username or Password not matched"
             })
         }
 
