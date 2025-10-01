@@ -68,6 +68,7 @@ bookingRouter.post("/:listingId", authChecker, async(req, res)=>{
     }
 })
 bookingRouter.delete("/:bookingId", authChecker, async(req, res)=>{
+    
     const {bookingId} = req.params;
     try{
         const removeBooking = await Booking.findByIdAndDelete({_id:bookingId})

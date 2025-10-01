@@ -1,10 +1,9 @@
 import { memo } from "react";
 import { MdOutlineCurrencyRupee } from "react-icons/md";
 
-
-function BookingCard({item}) {
+function BookingCard({item,handleRemoveBooking}) {
   return (
-    <div className='w-full h-full border shadow-md bg-slate-100 md:w-96 rounded-xl' >
+    <div className='w-full h-full border shadow-md bg-slate-100 md:w-80 rounded-xl' >
       <div>
         <img src={item.listing.images[0]} className='w-full h-60 rounded-t-xl' alt="" />
       </div>
@@ -19,7 +18,7 @@ function BookingCard({item}) {
           <p>{item.checkOut}</p>
         </div>
         <p>{item.listing.description}</p>
-        <button className="p-2 text-white bg-black rounded-md">Cancel Booking</button>
+        <button onClick={handleRemoveBooking} className="p-2 text-white bg-black rounded-md">Cancel Booking</button>
       </div>
     </div>
   )

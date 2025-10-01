@@ -27,14 +27,18 @@ import BookingCard from "../components/BookingCard"
   }
   const DeleteBooking =useCallback(async(id)=>{
     try{
-      const response = await fetch(`${BackendUrl}/user/bookings/${id}`,{
+      const response = await fetch(`${BackendUrl}/booking/${id}`,{
         method: "DELETE",
-        credentials: 'include'
+        headers : {
+          token: localStorage.getItem('token')
+        }
       })
       const result = await response.json()
-      if(response.ok){
+      if(response.status == 200){
         Bookings()
         toast.success(result.message)
+      }else{
+        toast.error(result.error)
       }
     }catch(error){
       toast.error(error.message)
@@ -43,7 +47,7 @@ import BookingCard from "../components/BookingCard"
   useEffect(()=>{
     Bookings()
   },[])
-  if(listing === null){
+  if(listing.length ==0){
     return (
       <div className="h-[80vh] flex items-center justify-center">
         <h1 className="text-5xl ">No Bookings </h1>
@@ -51,9 +55,9 @@ import BookingCard from "../components/BookingCard"
     )
   }
   return (
-    <div className="flex flex-wrap justify-center w-full min-h-screen gap-10 p-5 lg:px-40 md:justify-between">
+    <div className="flex flex-wrap w-full min-h-screen gap-10 p-5 justify-evenly ">
       {listing && listing.map((item)=>(
-        <BookingCard key={item._id} item={{...item}}/>
+        <BookingCard key={item._id} item={{...item}} handleRemoveBooking={()=>DeleteBooking(item._id)}/>
       ))}
     </div>
   )
