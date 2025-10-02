@@ -1,11 +1,27 @@
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo } from "react";
 import { Link } from "react-router-dom";
-import ListingHeartBtn from "./ListingHeartBtn";
+import { CiHeart } from "react-icons/ci";
+import { FaHeart } from "react-icons/fa";
+import toast from "react-hot-toast";
 
-function ListingCard({  item }) {
+function ListingCard({ item, saved, setSaved, postSavedListing }) {
+  const isSaved = saved.find((b) => b._id === item._id);
+
+  function removeSavedListing(id) {
+    let listing = JSON.parse(localStorage.getItem("saved-listing")) || [];
+    console.log(listing);
+    if (!Array.isArray(listing)) {
+      listing = [];
+    }
+    if (listing) {
+      const newListing = listing.filter((b) => b._id !== id);
+      localStorage.setItem("saved-listing", JSON.stringify(newListing));
+      toast.success("Unsaved");
+      setSaved(newListing);
+    }
+  }
   return (
-    <div
-    className="h-auto w-full sm:w-72 md:w-[400px] lg:w-96 xl:w-80 sm:mx-auto rounded-2xl relative">
+    <div className="h-auto w-full sm:w-72 md:w-[400px] lg:w-96 xl:w-80 sm:mx-auto rounded-2xl relative">
       <Link to={`/detail/${item._id}`}>
         <img
           src={item.images[0]}
@@ -25,14 +41,23 @@ function ListingCard({  item }) {
         </div>
       </Link>
       <div className="absolute p-2 top-5 right-5 ">
-        {/* {JSON.parse(saved)} */}
-        {/* {savedListing.includes(String(item._id))?
-       <button  className="text-2xl text-white b"><i className="fa-solid fa-heart"></i> </button> : */}
-       <button  className="text-2xl text-white b"><i className="fa-regular fa-heart"></i> </button>
-       {/* } */}
-       
+        {isSaved ? (
+          <button
+            onClick={() => removeSavedListing(item._id)}
+            className="text-2xl text-red-700 "
+          >
+            {" "}
+            <FaHeart />{" "}
+          </button>
+        ) : (
+          <button
+            onClick={() => postSavedListing(item)}
+            className="text-2xl text-white b"
+          >
+            <CiHeart />{" "}
+          </button>
+        )}
       </div>
-      
     </div>
   );
 }

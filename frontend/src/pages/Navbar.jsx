@@ -18,7 +18,6 @@ function Navbar() {
 
 
   const searchedListing =async()=>{
-    
       try{
         const response = await fetch(`${backendUrl}/listings/search?query=${query}`, {
           method: 'GET'
@@ -46,7 +45,6 @@ function Navbar() {
   
   };
   useEffect(()=>{
-    
     searchedListing()
   },[query])
 
