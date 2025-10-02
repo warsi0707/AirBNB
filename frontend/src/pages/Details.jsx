@@ -182,7 +182,7 @@ export default function Details() {
       
     </div>
     {isRating && <RatingInputForm handleReviewForm={()=>setIsRating(!isRating)} handleListing={handleListing}/>  }
-      {isBooking && <BookingInputForm listing={{...listing}} handleBookingForm={()=> setIsBooking(!isBooking)} />}
+      {isBooking && <BookingInputForm listing={listing} handleBookingForm={()=> setIsBooking(!isBooking)} />}
     </div>
   );
 }

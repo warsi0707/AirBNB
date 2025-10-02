@@ -8,6 +8,7 @@ import { BackendUrl } from "../helper";
 
 
 function BookingInputForm({ handleBookingForm,listing }) {
+
   const {isAuthenticated} = useContext(AuthContext)
   const {id} = useParams()
   const [formData, setFormData] = useState({
@@ -97,7 +98,7 @@ function BookingInputForm({ handleBookingForm,listing }) {
         </div>
         <div className="hidden w-full h-screen px-32 lg:flex ">
           <div className="w-full h-full overflow-hidden lg:h-[600px] bg-gray-100 shadow-lg">
-            <img src="/user.png" className="w-full h-72 rounded-t-3xl" alt="" />
+            <img src={listing?.images[0]} className="w-full h-72 rounded-t-3xl" alt="" />
             <div className="p-5 space-y-5">
               <div className="flex items-center justify-between text-2xl font-semibold">
               <p className="">{listing?.title}</p>
