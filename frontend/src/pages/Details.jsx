@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { BackendUrl } from "../helper";
 import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -20,7 +20,9 @@ export default function Details() {
   const [isBooking, setIsBooking] = useState(false)
   const [reviews, setReviews] = useState([])
   const [loading, setLoading] = useState(false)
-  const {saved} = useContext(AuthContext)
+  const {saved,authUser} = useContext(AuthContext)
+  console.log(authUser)
+  const navigate = useNavigate()
   
 
 
@@ -42,21 +44,25 @@ export default function Details() {
       toast.error(error);
     }
   },[])
-  // const handleGetRate =async()=>{
-  //   try{
-  //     const response = await fetch(`${BackendUrl}/rate/${id}`,{
-  //       method: 'GET'
-  //     })
-  //     const result = await response.json()
-  //     if(response.status == 200){
-  //       setReviews([...reviews,{rate: result.rate, comment: result.comment}])
-  //     }else{
-  //       setReviews([])
-  //     }
-  //   }catch(error){
-  //     console.error(error)
-  //   }
-  // }
+  const handleDeleteListing =async(id)=>{
+    try{
+      const response = await fetch(`${BackendUrl}/admin/listing/${id}`, {
+        method: 'DELETE',
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+      const result = await response.json()
+      if(response.status ==200){
+        navigate("/")
+        toast.success(result.message)
+      }else{
+        toast.error(result.error)
+      }
+    }catch(error){
+      toast.error("Failed")
+    }
+  }
   const handleDeleteRate =useCallback( async(rateId)=>{
     try{
       const response = await fetch(`${BackendUrl}/rate/${id}/${rateId}`,{
@@ -80,7 +86,6 @@ export default function Details() {
  
   useEffect(() => {
     handleListing();
-    // handleGetRate()
   }, [id, reviews]);
 
 
@@ -94,9 +99,9 @@ export default function Details() {
   return (
     <div className="md:px-32">
     <div className="flex justify-between p-3 py-5 lg:px-10">
-       <h1 className="px-10 text-3xl font-bold lg:px-10 lg:text-5xl">{listing.title}</h1>
+       <h1 className="px-5 text-xl font-bold lg:px-10 lg:text-5xl">{listing.title}</h1>
        {saved && saved.map((b)=>b._id ===listing._id ?
-       <p key={b._id} className="flex items-center gap-2 pr-5 text-lg text-red-100"><FaHeart/>  <p className="underline">Your Favorie</p></p>: "")}
+       <p key={b._id} className="flex items-center gap-2 pr-5 text-sm text-red-100 md:text-lg"><FaHeart/>  <p className="underline">Your Favorie</p></p>: "")}
     </div>
     <div className="flex flex-col-reverse w-full min-h-screen grid-cols-5 gap-10 p-5 lg:p-10 lg:grid">
       <div className="flex flex-col w-full min-h-screen col-span-2 gap-10 px-5 text-xl lg:px-10">
@@ -169,6 +174,11 @@ export default function Details() {
             listing?.images?.slice(1).map((item, indx) => (
             <img key={indx} src={item} className="w-full h-48 rounded-2xl" />))}
         </div>
+        {authUser && authUser.role === 'ADMIN' &&
+        <div className="flex flex-col gap-2 py-5 md:flex-row md:gap-10 lg:justify-end">
+          <button className="p-2 md:px-5 md:py-1.5 text-white bg-yellow-500 rounded-md">Update Listing</button>
+            <button onClick={()=>handleDeleteListing(listing._id)} className="p-2 md:px-5 md:py-1.5 text-white bg-red-100 rounded-md">Delete Listing</button>
+        </div>}
       </div>
       
     </div>
