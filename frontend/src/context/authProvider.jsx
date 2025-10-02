@@ -7,6 +7,7 @@ export default function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [listingData, setListingData] = useState([])
   const [loading, setLoading] = useState(false)
+  const [saved, setSaved] = useState([]);
   const backendUrl = BackendUrl;
 
     const verifyLogin =  async() => {
@@ -32,14 +33,19 @@ export default function AuthProvider({ children }) {
         console.error(error)
       }
     }
+    const GetSavedListing = () => {
+    const listing = JSON.parse(localStorage.getItem("saved-listing")) || [];
+    setSaved(listing);
+  };
    
     useEffect(() => {
       verifyLogin();
+      GetSavedListing()
   }, [isAuthenticated]);
 
   return (
     <div>
-      <AuthContext.Provider value={{authUser, setAuthUser,isAuthenticated, setIsAuthenticated,listingData, setListingData,loading, setLoading }}>
+      <AuthContext.Provider value={{authUser, setAuthUser,isAuthenticated, setIsAuthenticated,listingData, setListingData,loading, setLoading,saved, setSaved }}>
         {children}
       </AuthContext.Provider>
     </div>

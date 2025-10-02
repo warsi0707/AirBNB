@@ -94,6 +94,7 @@ function Navbar() {
         <>
         <Link to={"/signin"} className="hover:underline">Signin</Link>
         <Link to={"/signup"} className="hover:underline">Signup</Link>
+        <Link to={"/saved-listing"} className="hover:underline">Liked Listing</Link>
         </>
       }
       </div>

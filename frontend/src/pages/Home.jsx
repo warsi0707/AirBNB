@@ -7,9 +7,9 @@ import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
 
 function Home() {
-  const { listingData, setListingData, loading, setLoading } =
+  const { listingData, setListingData, loading, setLoading,saved, setSaved } =
     useContext(AuthContext);
-  const [saved, setSaved] = useState([]);
+  // const [saved, setSaved] = useState([]);
 
   const allListing = async () => {
     try {
@@ -27,11 +27,7 @@ function Home() {
     }
   };
 
-  const GetSavedListing = () => {
-    const listing = JSON.parse(localStorage.getItem("saved-listing")) || [];
-    setSaved(listing);
-    allListing();
-  };
+
   const postSavedListing = (item) => {
     let listing = JSON.parse(localStorage.getItem("saved-listing")) || [];
     if (!Array.isArray(listing)) {
@@ -49,7 +45,6 @@ function Home() {
 
   useEffect(() => {
     allListing();
-    GetSavedListing();
   }, []);
 
   if (loading) {

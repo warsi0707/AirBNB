@@ -9,7 +9,6 @@ function ListingCard({ item, saved, setSaved, postSavedListing }) {
 
   function removeSavedListing(id) {
     let listing = JSON.parse(localStorage.getItem("saved-listing")) || [];
-    console.log(listing);
     if (!Array.isArray(listing)) {
       listing = [];
     }

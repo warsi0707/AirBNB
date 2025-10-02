@@ -12,7 +12,8 @@ export default {
         "lg": "1024px"
       },
       colors : {
-        "slate-100": "#f3f3f2"
+        "slate-100": "#f3f3f2",
+        "red-100": "#ff395d"
       }
     },
   },

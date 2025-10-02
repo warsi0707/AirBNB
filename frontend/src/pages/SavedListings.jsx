@@ -1,61 +1,17 @@
-import { memo, useCallback, useEffect, useState } from "react"
-import toast from "react-hot-toast"
-import { BackendUrl } from "../helper"
+import { memo, useContext, useState } from "react"
 import SavedListingCard from "../components/SavedListingCard"
+import AuthContext from "../context/AuthContext"
 
 
 function SavedListings() {
-  const [listing, setListing] = useState([])
+  const {saved} = useContext(AuthContext)
 
-  const GetListing =useCallback( async()=>{
-    try{
-      const response = await fetch(`${BackendUrl}/user/saved`,{
-        method: "GET",
-        credentials: 'include'
-      })
-      const result = await response.json()
-      if(response.ok){
-        setListing(result.savedListing)
-      }else{
-        setListing([])
-      }
-      
-    }catch(error){
-      toast.error(error.message)
-    }
-  },[])
-  const RemoveSave =useCallback(async(id)=>{
-    try{
-      const response = await fetch(`${BackendUrl}/user/save/${id}`,{
-        method: "DELETE",
-        credentials: 'include'
-      })
-      const result = await response.json()
 
-      if(response.ok){
-        GetListing()
-        toast.success(result.message)
-      }else{
-        toast.error(result.message)
-      }
-    }catch(error){
-      toast.error(error.message)
-    }
-  },[])
-  useEffect(()=>{
-    GetListing()
-  },[])
-  if(listing.length <=0){
-    return (
-      <div className="h-[60vh] flex items-center justify-center ">
-        <p className="text-5xl ">No saved listing</p>
-      </div>
-    )
-  }
   return (
-    <div className="flex flex-col gap-2 m-2 sm:m-10 h-[80vh]">
-      {listing.map((item)=> (
-        <SavedListingCard key={item._id} title={item.listing.title} date={item.savedAt} id={item.listing._id} onclick={()=> RemoveSave(item._id)}/>
+    <div className="w-full min-h-screen p-3 space-y-5 lg:px-60">
+      <h1 className="text-2xl font-semibold">Your Saved Listing</h1>
+      {saved && saved.map((item)=> (
+        <SavedListingCard key={item._id} item={item}/>
       ))}
     </div>
   )

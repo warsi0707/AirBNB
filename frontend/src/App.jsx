@@ -29,6 +29,7 @@ function App() {
         <Route path="/listing/:id" element={<Edit/>}/>
         <Route path="/add"  element={isAuthenticated && authUser.role === 'ADMIN'? <AddListing/>: <Signin/>}/>
         <Route path="/bookings"  element={isAuthenticated? <YourBookings/>: <Signin/>}/>
+        <Route path="/saved-listing" element={<SavedListings/>}/>
         <Route path="*" element={<ErrorPage/>}/>
       </Routes>
       <Footer/>
