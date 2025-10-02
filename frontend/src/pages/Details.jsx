@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { BackendUrl } from "../helper";
 import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -21,7 +21,6 @@ export default function Details() {
   const [reviews, setReviews] = useState([])
   const [loading, setLoading] = useState(false)
   const {saved,authUser} = useContext(AuthContext)
-  console.log(authUser)
   const navigate = useNavigate()
   
 
@@ -174,9 +173,10 @@ export default function Details() {
             listing?.images?.slice(1).map((item, indx) => (
             <img key={indx} src={item} className="w-full h-48 rounded-2xl" />))}
         </div>
-        {authUser && authUser.role === 'ADMIN' &&
+
+        {authUser.role === 'ADMIN' && authUser.userId === listing.ownerId._id &&
         <div className="flex flex-col gap-2 py-5 md:flex-row md:gap-10 lg:justify-end">
-          <button className="p-2 md:px-5 md:py-1.5 text-white bg-yellow-500 rounded-md">Update Listing</button>
+          <Link to={`/listing/${listing._id}`} className="p-2 md:px-5 md:py-1.5 text-white bg-yellow-500 rounded-md text-center">Update Listing</Link>
             <button onClick={()=>handleDeleteListing(listing._id)} className="p-2 md:px-5 md:py-1.5 text-white bg-red-100 rounded-md">Delete Listing</button>
         </div>}
       </div>
