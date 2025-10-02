@@ -3,11 +3,19 @@
 ## About the project
 
 This project is an Airbnb-inspired platform.
-- User can signup
-- User can signin
-- User can post there listing, and edit and delete it
-- User can rate the listings with rating and some comment
-- Also rating owner cand edit and delete there comments
+
+- **Admin Control**:
+  - Admin can manage the Upload listing,
+  - Update Listing, Delete Listing, Cancel bookings, See bookings and user information.
+
+- **User Control**:
+  - User can SignIn, SignUp, Logout.
+  - User can rate a listing with stars and comment and also can remove comments.
+  - There is search option in navbar where user can search lisitn and location.
+  - User can Like and Dislike the listing.
+  - Like listing stored in localstorage.
+  - User can book a listing with there information and a period of date from date to date with daily price.
+  - User can cancel booking any time.
 
 ---
 
