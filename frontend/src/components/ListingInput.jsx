@@ -1,15 +1,16 @@
 import { memo } from "react"
 
- function ListingInput({title,type,placeholder,refs}) {
+ function ListingInput({label,type,placeholder,value, onchange}) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col w-full gap-2">
     <label htmlFor="" className="text-lg">
-      {title}
+      {label}
     </label>
     <input
-    ref={refs}
+    value={value}
+    onChange={onchange}
       type={type}
-      className="px-3 py-2 border border-gray-200 rounded-md text-md"
+      className="px-3 py-2 border border-gray-300 rounded-md outline-none text-md"
       placeholder={placeholder}
     />
   </div>

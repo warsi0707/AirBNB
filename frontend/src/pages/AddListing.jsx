@@ -1,84 +1,123 @@
 import { useNavigate } from "react-router-dom";
-import { BackendUrl } from "../helper";
 import toast from "react-hot-toast";
-import { memo,  useRef } from "react";
+import { memo, useState } from "react";
 import ListingInput from "../components/ListingInput";
+import { BackendUrl } from "../helper";
 
  function AddListing() {
-  const titleRef = useRef()
-  const imageRef = useRef()
-  const priceRef = useRef()
-  const descriptionRef = useRef()
-  const bedsRef = useRef()
-  const guestRef = useRef()
-  const backendUrl = BackendUrl;
+  const [title, setTitle] = useState("")
+  const [price, setPrice]= useState(0)
+  const [description, setDescription] = useState("")
+  const [location, setLocation] = useState("")
+  const [guests, setGuests] = useState(2)
+  const [bedrooms, setBedrooms] = useState(0)
+  const [amenties, setAmenties] = useState([])
+  const [images, setImages] = useState([])
+
+  const [amentiesInput, setAmentiesInput] = useState("")
+  const [imageInput, setImageInput] = useState("")
   const navigate = useNavigate();
 
-  const AddListing = async (e) => {
-    e.preventDefault();
-    const title = titleRef.current.value
-    const image = imageRef.current.value
-    const description = descriptionRef.current.value
-    const price = priceRef.current.value
-    const bedrooms = bedsRef.current.value
-    const guests = guestRef.current.value
+
+
+  const handleAddAmenties =()=>{
+    setAmenties([...amenties, amentiesInput])
+    setAmentiesInput("")
+  }
+  const handleImageUpload =()=>{
+    toast.success("Image uploaded")
+    setImages([...images, imageInput])
+    setImageInput("")
+  }
+
+
+  const handleAddListing = async () => {
     try {
-      const respone = await fetch(`${backendUrl}/listings`, {
+      const respone = await fetch(`${BackendUrl}/admin/listing`, {
         method: "POST",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
+          token: localStorage.getItem('token')
         },
-        body: JSON.stringify({ title, image, description, price, bedrooms, guests }),
+        body: JSON.stringify({ title, images, description, price,location, amenties, bedrooms, guests }),
       });
       const result = await respone.json();
-      if (respone.ok) {
+      if (respone.status ==200) {
         toast.success(result.message);
         setTimeout(() => {
           navigate("/");
         }, 2000);
       } else {
-        toast.error(result.validationMessage);
-        setTimeout(() => {
-          toast.error("");
-        }, 3000);
+        toast.error(result.error);
+        
       }
     } catch (error) {
       toast.error(error.message);
     }
   }
   return (
-    <div className="h-full">
+    <div className="w-full min-h-screen">
       <div className="bg-white rounded-md  max-w-[700px] mx-auto my-2 p-5">
         <h1 className="py-5 mb-5 text-3xl ">Create a new listing</h1>
-        <div className="inputs">
-          <form onSubmit={AddListing} className="flex flex-col gap-5">
-           <ListingInput title={"Title"} type={"text"} placeholder={"Title"} refs={titleRef}/>
-            <div className="flex flex-col">
-              <label htmlFor="" className="text-lg">
-                Description
-              </label>
-              <textarea
-               ref={descriptionRef}
-                type="text"
-                className="px-3 py-2 border border-gray-200 rounded-md text-md"
-                placeholder="Enter Your Descriptions"
-              />
+        <div className="flex flex-col gap-4">
+          <ListingInput value={title} onchange={(e)=> setTitle(e.target.value)} label={"Title"} type={'text'} placeholder={'Listing Title'}/>
+          <div className="flex flex-col gap-2 md:flex-row md:justify-between">
+            <ListingInput value={price} onchange={(e)=> setPrice(e.target.value)} label={"Price /Day"} type={'number'}placeholder={"1200"}/>
+            <div className="flex flex-col w-full gap-2">
+              <label htmlFor="" className="text-lg">No of Beds</label>
+              <select value={bedrooms} onChange={(e)=> setBedrooms(e.target.value)} name="" id="" className="p-2 border border-gray-300 rounded-md outline-none">
+                <option value="">Select No Of Beds</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+              </select>
             </div>
-            <ListingInput title={"Image Link"} type={"text"} placeholder={"Link..."} refs={imageRef}/>
-            <div className="flex flex-col justify-between gap-5 md:flex-row">
+            <div className="flex flex-col w-full gap-2">
+              <label htmlFor="" className="text-lg">No of Guests</label>
+              <select value={guests} onChange={(e)=> setGuests(e.target.value)} name="" id="" className="p-2 border border-gray-300 rounded-md outline-none">
+                <option value="">Select Guests</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+              </select>
+            </div>
+          </div>
+          <div className="flex flex-col items-end justify-between w-full gap-2 md:flex-row ">
+            <div className="flex flex-col w-full gap-2">
+              <label htmlFor="">Amenties</label>
+              <div className="flex gap-2">
+                {amenties && amenties.map((item,indx)=>(
+                  <p key={indx}>{item}</p>
+                ))}
+              </div>
+              <div className="flex w-full border border-gray-300">
+                <input value={amentiesInput} onChange={(e)=> setAmentiesInput(e.target.value)} type="text" className="w-full p-2 outline-none" placeholder="amenties" />
+                <button onClick={handleAddAmenties} className="px-2 border-l">+</button>
+              </div>
               
-            <ListingInput title={"Price"} type={"number"}  refs={priceRef}/>
-             <ListingInput  title={"Guests"} type={"number"}  refs={guestRef}/>
-             <ListingInput  title={"Beds"} type={"number"}  refs={bedsRef}/>
             </div>
-            <button
-              type="submit"
-              className="w-full py-2 my-10 text-xl font-bold text-white bg-red-500 rounded-md hover:bg-red-700"
-            >
-              Submit
-            </button>
-          </form>
+            <ListingInput value={location} onchange={(e)=> setLocation(e.target.value)} label={"Location"} type={'text'} placeholder={"listign Location"}/>
+            
+          </div>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="">Iamge Link</label>
+              <div className="flex w-full gap-2">
+              <input value={imageInput} onChange={(e)=> setImageInput(e.target.value)} type="text" className="w-full p-1.5 rounded-md border border-gray-300 outline-none" id="iamges" />
+              <button onClick={handleImageUpload} className="px-2 border border-gray-300 rounded-md">Upload</button>
+            </div>
+            </div>
+          
+          <div className="flex flex-col gap-2">
+            <label htmlFor="">Description</label>
+            <textarea value={description} onChange={(e)=> setDescription(e.target.value)} name="" className="p-3 border border-gray-300 rounded-md" placeholder="Write something" rows={5} id=""></textarea>
+          </div>
+          <button onClick={handleAddListing} className="w-full p-2 text-white bg-red-100 rounded-md">Upload Listing</button>
         </div>
       </div>
     </div>

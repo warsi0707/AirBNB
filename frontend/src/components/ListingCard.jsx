@@ -4,6 +4,7 @@ import { CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
 import toast from "react-hot-toast";
 
+
 function ListingCard({ item, saved, setSaved, postSavedListing }) {
   const isSaved = saved.find((b) => b._id === item._id);
 

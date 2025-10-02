@@ -12,14 +12,16 @@ function Home() {
   // const [saved, setSaved] = useState([]);
 
   const allListing = async () => {
+    setLoading(true);
     try {
       const response = await fetch(`${BackendUrl}/listings`);
       const result = await response.json();
-      setLoading(true);
+      
       if (response.status == 200) {
         setLoading(false);
         setListingData(result.listings);
       } else {
+        setLoading(false)
         setListingData([]);
       }
     } catch (error) {
@@ -49,15 +51,15 @@ function Home() {
 
   if (loading) {
     return (
-      <>
+      <div className="w-full min-h-screen">
         <Loading />
-      </>
+      </div>
     );
   }
   return (
     <>
       {loading ? <h1>Loading...</h1> : ""}
-      <div className="flex flex-wrap w-full gap-5 px-10 pt-10 lg:px-32 ">
+      <div className="flex flex-wrap w-full gap-5 p-5 pt-10 md:px-10 ">
         {listingData &&
           listingData.map((item) => (
             <ListingCard

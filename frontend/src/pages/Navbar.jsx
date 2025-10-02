@@ -80,23 +80,28 @@ function Navbar() {
       {isAuthenticated && authUser.username &&
       <div className="py-5 border-b">
         <p className="text-2xl font-semibold">{authUser?.username[0].toUpperCase()+ authUser?.username?.slice(1)}</p>
-      </div>}
+      </div>}      
       {isAuthenticated && isAuthenticated &&
       <div className="flex flex-col gap-2 py-5 border-b">
         {authUser && authUser.role === 'ADMIN' &&
         <Link to={"/add"} className="hover:underline">Post Your Airbnb</Link>}
-        
         <Link to={"/bookings"} className="hover:underline">Your Bookings</Link>
       </div>}
       <div className="flex flex-col gap-2 py-5 ">
         {isAuthenticated? 
-        <button onClick={handleLogout} className="flex justify-start hover:underline">Logout</button>:
+         <>
+         <Link to={"/saved-listing"} className="hover:underline">Saved Listing</Link>
+        <button onClick={handleLogout} className="flex justify-start hover:underline">Logout</button>
+         </>:
         <>
+        <Link to={"/saved-listing"} className="hover:underline">Saved Listing</Link>
         <Link to={"/signin"} className="hover:underline">Signin</Link>
         <Link to={"/signup"} className="hover:underline">Signup</Link>
-        <Link to={"/saved-listing"} className="hover:underline">Liked Listing</Link>
+
         </>
       }
+      {/* <Link to={"/saved-listing"} className="hover:underline">Liked Listing</Link> */}
+      
       </div>
     </div>}
     </>

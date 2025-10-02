@@ -1,6 +1,6 @@
 import { useParams } from "react-router";
 import { BackendUrl } from "../helper";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { LuIndianRupee } from "react-icons/lu";
@@ -10,7 +10,8 @@ import Ratings from "../components/Ratings";
 import RatingInputForm from "../components/RatingInputForm";
 import { useCallback } from "react";
 import BookingInputForm from "../components/BookingInputForm";
-
+import AuthContext from "../context/AuthContext";
+import { FaHeart } from "react-icons/fa";
 
 export default function Details() {
   const { id } = useParams();
@@ -19,6 +20,7 @@ export default function Details() {
   const [isBooking, setIsBooking] = useState(false)
   const [reviews, setReviews] = useState([])
   const [loading, setLoading] = useState(false)
+  const {saved} = useContext(AuthContext)
   
 
 
@@ -93,7 +95,8 @@ export default function Details() {
     <div className="md:px-32">
     <div className="flex justify-between p-3 py-5 lg:px-10">
        <h1 className="px-10 text-3xl font-bold lg:px-10 lg:text-5xl">{listing.title}</h1>
-       <button className="flex items-center gap-2 pr-5 text-xl "><i className="mt-1.5 fa-regular fa-heart"></i>  <p className="underline">Save</p></button>
+       {saved && saved.map((b)=>b._id ===listing._id ?
+       <p key={b._id} className="flex items-center gap-2 pr-5 text-lg text-red-100"><FaHeart/>  <p className="underline">Your Favorie</p></p>: "")}
     </div>
     <div className="flex flex-col-reverse w-full min-h-screen grid-cols-5 gap-10 p-5 lg:p-10 lg:grid">
       <div className="flex flex-col w-full min-h-screen col-span-2 gap-10 px-5 text-xl lg:px-10">
