@@ -70,9 +70,6 @@ To set up the Airbnb on your local machine, follow these steps:
 ### Homepage
 ![alt text](frontend/public/screenshot/home.png)
 
-### Saved or Favorite Listing
-![alt text](frontend/public/screenshot/likeDislike.png)
-
 ### Listing By Search
 ![alt text](frontend/public/screenshot/searchListing.png)
 
