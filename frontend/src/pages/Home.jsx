@@ -59,7 +59,7 @@ function Home() {
   return (
     <>
       {loading ? <h1>Loading...</h1> : ""}
-      <div className="flex flex-wrap w-full gap-5 p-5 pt-10 md:px-10 ">
+      <div className="flex flex-wrap w-full min-h-screen gap-5 p-5 pt-10 md:px-10 ">
         {listingData &&
           listingData.map((item) => (
             <ListingCard
@@ -70,6 +70,11 @@ function Home() {
               postSavedListing={postSavedListing}
             />
           ))}
+          {listingData.length ==0 && 
+          <div className="mx-auto">
+            <p className="mt-20 text-xl">No matched listing</p>
+          </div>
+          }
       </div>
     </>
   );

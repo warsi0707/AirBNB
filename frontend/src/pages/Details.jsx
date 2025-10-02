@@ -25,7 +25,7 @@ export default function Details() {
   
 
 
-  const handleListing =useCallback( async () => {
+  const handleListing = async () => {
     setLoading(true)
     try {
       const response = await fetch(`${BackendUrl}/listings/${id}`, {
@@ -42,7 +42,7 @@ export default function Details() {
     } catch (error) {
       toast.error(error);
     }
-  },[])
+  }
   const handleDeleteListing =async(id)=>{
     try{
       const response = await fetch(`${BackendUrl}/admin/listing/${id}`, {
@@ -173,8 +173,7 @@ export default function Details() {
             listing?.images?.slice(1).map((item, indx) => (
             <img key={indx} src={item} className="w-full h-48 rounded-2xl" />))}
         </div>
-
-        {authUser.role === 'ADMIN' && authUser.userId === listing.ownerId._id &&
+        { authUser?.username === listing?.ownerId?.username &&
         <div className="flex flex-col gap-2 py-5 md:flex-row md:gap-10 lg:justify-end">
           <Link to={`/listing/${listing._id}`} className="p-2 md:px-5 md:py-1.5 text-white bg-yellow-500 rounded-md text-center">Update Listing</Link>
             <button onClick={()=>handleDeleteListing(listing._id)} className="p-2 md:px-5 md:py-1.5 text-white bg-red-100 rounded-md">Delete Listing</button>
