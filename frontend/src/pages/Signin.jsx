@@ -1,48 +1,22 @@
-import { useNavigate } from "react-router-dom";
-import { BackendUrl } from "../helper";
-import toast from "react-hot-toast";
+import { useNavigate   } from "react-router-dom";
 import { useRef } from "react";
 import UserInput from "../components/UserInput";
-import axios from 'axios'
-import { useState } from "react";
-import { useCallback } from "react";
-import { useContext } from "react";
-import AuthContext from "../context/AuthContext";
-
+import { useDispatch, useSelector } from "react-redux";
+import { userSignin } from "../redux/sclice/userSlice";
 
 export default function Signin() {
+  const dispatch = useDispatch()
+  const user = useSelector(state => state.userAuth)
+  const loading = useSelector(state=> state.userAuth.loading)
   const usernameRef = useRef('')
   const passwordRef = useRef('')
-  const backendUrl = BackendUrl;
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false)
-  const {setIsAuthenticated} = useContext(AuthContext)
+  const navigate = useNavigate()
+ 
 
-  const Signin =useCallback(async (e) => {
-    e.preventDefault();
-    setLoading(true)
-    const username = usernameRef.current.value;
-    const password = passwordRef.current.value;
-    if(!username || !password){
-      toast.error("All input required")
-    }
-    try {
-      const response = await axios.post(`${backendUrl}/auth/signin`,{username, password})
-      if(response.status ==200){
-        setIsAuthenticated(true)
-        setLoading(false)
-        toast.success(response.data.message)
-        localStorage.setItem('token', response.data.token)
-        navigate("/")
-      }else{
-        setLoading(false)
-        toast.error(response.data.error)
-      }
-    } catch (err) {
-      setLoading(false)
-      toast(err.message);
-    }
-  },[])
+  const handleSignin =()=>{
+    dispatch(userSignin({username: usernameRef.current.value, password: passwordRef.current.value}))
+    navigate("/")
+  }
   return (
     <div className="h-screen"> 
       <div className="w-auto md:w-[600px] mx-auto my-10 bg-white rounded-2xl">
@@ -61,7 +35,7 @@ export default function Signin() {
                   Signup
                 </a>
               </h1>
-              <button onClick={Signin} className="w-full p-3 my-2 text-xl text-white bg-red-600 rounded-xl hover:bg-red-700">{`${loading? "loading...": "Signin"}`}</button>
+              <button onClick={handleSignin} className={`${loading ==true && "cursor-wait"} w-full p-3 my-2 text-xl text-white bg-red-600 rounded-xl hover:bg-red-700 cursor-pointer`} >{`${loading ==true? "loading...": "Signin"}`}</button>
           </div>
         </div>
       </div>

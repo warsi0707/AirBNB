@@ -78,9 +78,12 @@ authRouter.post("/signin",  async (req, res) => {
                 error: `${username} not found`
             })
         }
-        const user = findUser ? bcrypt.compare(password, findUser.password) : false
-       
-        if (user) {
+        const matchedPassword = findUser ?await bcrypt.compare(password, findUser.password) : false
+        if(!matchedPassword){
+            return res.status(404).json({
+                error: "Username or Password not matched"
+            })
+        }
             const token = jwt.sign({
                 userId: findUser._id,
                 username: findUser.username,
@@ -96,14 +99,14 @@ authRouter.post("/signin",  async (req, res) => {
             // })
             return res.json({
                 message: "Signin Succes",
-                token: token
+                token: token,
+                user:{
+                    username: findUser.username,
+                    email: findUser.email,
+                    role: findUser.role,
+                    userId: findUser._id
+                }
             })
-        } else {
-            return res.status(404).json({
-                error: "Username or Password not matched"
-            })
-        }
-
     } catch (error) {
         return res.status(404).json({
             message: error.message

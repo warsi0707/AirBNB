@@ -10,11 +10,15 @@ const cors = require("cors")
 const { authRouter } = require('./routes/auth')
 const { reviewRouter } = require('./routes/review')
 const { bookingRouter } = require('./routes/booking')
+const ConnectDB = require('./utils/ConnectDB')
+const { FRONTEND_URL } = require('./config')
 
 app.use(cors({
-    origin: process.env.FRONTEND_URL,
+    origin: FRONTEND_URL,
     credentials: true
 }))
+
+ConnectDB()
 app.use(express.json())
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname,"frontend","dist")))
@@ -35,8 +39,6 @@ app.get("*", (req, res) => {
 
 const Main = async () => {
     try {
-        await mongoose.connect(process.env.MONGO_URL)
-        console.log("Database connected")
         app.listen(process.env.PORT || 3000)
         console.log("App is listing on port 3000")
     } catch (err) {

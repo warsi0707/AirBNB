@@ -1,91 +1,30 @@
-import { Link, useNavigate, useParams } from "react-router";
-import { BackendUrl } from "../helper";
-import { useContext, useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import {  useParams } from "react-router";
+import { useEffect, useState } from "react";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { LuIndianRupee } from "react-icons/lu";
 import { IoPeopleSharp } from "react-icons/io5";
 import { IoBedSharp } from "react-icons/io5";
 import Ratings from "../components/Ratings";
 import RatingInputForm from "../components/RatingInputForm";
-import { useCallback } from "react";
 import BookingInputForm from "../components/BookingInputForm";
-import AuthContext from "../context/AuthContext";
-import { FaHeart } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import {  fetchlistingByid, getReviews, } from "../redux/sclice/listingSlice";
 
 export default function Details() {
+  const dispatch = useDispatch()
+  const listing = useSelector(state => state.listing.detailedListing)
+  const loading = useSelector(state => state.listing.loading)
+  const reviews = useSelector(state => state.listing.reviews)
   const { id } = useParams();
-  const [listing, setListing] = useState({});
   const [isRating, setIsRating] = useState(false)
   const [isBooking, setIsBooking] = useState(false)
-  const [reviews, setReviews] = useState([])
-  const [loading, setLoading] = useState(false)
-  const {saved,authUser} = useContext(AuthContext)
-  const navigate = useNavigate()
-  
 
-
-  const handleListing = async () => {
-    setLoading(true)
-    try {
-      const response = await fetch(`${BackendUrl}/listings/${id}`, {
-        method: "GET",
-      });
-      const result = await response.json();
-      if (response.status == 200) {
-        setLoading(false)
-        setListing(result.listing);
-      }else{
-        setLoading(false)
-        setListing([])
-      }
-    } catch (error) {
-      toast.error(error);
-    }
-  }
-  const handleDeleteListing =async(id)=>{
-    try{
-      const response = await fetch(`${BackendUrl}/admin/listing/${id}`, {
-        method: 'DELETE',
-        headers: {
-          token: localStorage.getItem('token')
-        }
-      })
-      const result = await response.json()
-      if(response.status ==200){
-        navigate("/")
-        toast.success(result.message)
-      }else{
-        toast.error(result.error)
-      }
-    }catch(error){
-      toast.error("Failed")
-    }
-  }
-  const handleDeleteRate =useCallback( async(rateId)=>{
-    try{
-      const response = await fetch(`${BackendUrl}/rate/${id}/${rateId}`,{
-        method: 'DELETE',
-        credentials: 'include',
-        headers: {
-          token: localStorage.getItem('token')
-        }
-      })
-      const result = await response.json()
-      if(response.status == 200){
-        handleListing()
-        toast.success(result.message)
-      }else{
-        toast.error(result.error)
-      }
-    }catch(error){
-      toast.error(error)
-    }
-  },[])
  
   useEffect(() => {
-    handleListing();
-  }, [id, reviews]);
+    dispatch(fetchlistingByid(id))
+    dispatch(getReviews(id))
+    // handleListing();
+  }, [ id,dispatch]);
 
 
   if(loading){
@@ -99,8 +38,8 @@ export default function Details() {
     <div className="md:px-32">
     <div className="flex justify-between p-3 py-5 lg:px-10">
        <h1 className="px-5 text-xl font-bold lg:px-10 lg:text-5xl">{listing.title}</h1>
-       {saved && saved.map((b)=>b._id ===listing._id ?
-       <p key={b._id} className="flex items-center gap-2 pr-5 text-sm text-red-100 md:text-lg"><FaHeart/>  <p className="underline">Your Favorie</p></p>: "")}
+       {/* {saved && saved.map((b)=>b._id ===listing._id ?
+       <p key={b._id} className="flex items-center gap-2 pr-5 text-sm text-red-100 md:text-lg"><FaHeart/>  <p className="underline">Your Favorie</p></p>: "")} */}
     </div>
     <div className="flex flex-col-reverse w-full min-h-screen grid-cols-5 gap-10 p-5 lg:p-10 lg:grid">
       <div className="flex flex-col w-full min-h-screen col-span-2 gap-10 px-5 text-xl lg:px-10">
@@ -154,8 +93,8 @@ export default function Details() {
             <button onClick={()=> setIsRating(!isRating)} className="hover:underline hover:text-red-500">Rate us <i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></button>
         </div>
         <div className="flex flex-col gap-3">
-          {listing.reviews && listing.reviews.map((item)=>(
-            <Ratings key={item._id} rate={{...item}} handleDeleteRate={handleDeleteRate} />
+          {reviews && reviews.map((item,index)=>(
+            <Ratings key={item._id || index} rate={item} />
           ))}
           
         </div>
@@ -173,15 +112,15 @@ export default function Details() {
             listing?.images?.slice(1).map((item, indx) => (
             <img key={indx} src={item} className="w-full h-48 rounded-2xl" />))}
         </div>
-        { authUser?.username === listing?.ownerId?.username &&
+        {/* { authUser?.username === listing?.ownerId?.username &&
         <div className="flex flex-col gap-2 py-5 md:flex-row md:gap-10 lg:justify-end">
           <Link to={`/listing/${listing._id}`} className="p-2 md:px-5 md:py-1.5 text-white bg-yellow-500 rounded-md text-center">Update Listing</Link>
             <button onClick={()=>handleDeleteListing(listing._id)} className="p-2 md:px-5 md:py-1.5 text-white bg-red-100 rounded-md">Delete Listing</button>
-        </div>}
+        </div>} */}
       </div>
       
     </div>
-    {isRating && <RatingInputForm handleReviewForm={()=>setIsRating(!isRating)} handleListing={handleListing}/>  }
+    {isRating && <RatingInputForm handleReviewForm={()=>setIsRating(!isRating)} />  }
       {isBooking && <BookingInputForm listing={listing} handleBookingForm={()=> setIsBooking(!isBooking)} />}
     </div>
   );

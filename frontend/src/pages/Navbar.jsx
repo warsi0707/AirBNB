@@ -1,52 +1,29 @@
-import { useContext, useState, memo } from "react";
+import { useState, memo } from "react";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { BackendUrl } from "../helper";
-import toast from "react-hot-toast";
-import AuthContext from "../context/AuthContext";
 import { HiMiniBars3 } from "react-icons/hi2";
 import { RxCross1 } from "react-icons/rx";
 import { IoMdSearch } from "react-icons/io";
 import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { userAuthVerify, userLogOut } from "../redux/sclice/userSlice";
+import { fetchSearchListing } from "../redux/sclice/listingSlice";
 
 function Navbar() {
-  const { isAuthenticated, setIsAuthenticated, authUser, setListingData, setLoading } = useContext(AuthContext);
+  const dispatch = useDispatch()
+  const userAuth = useSelector(state=> state.userAuth)
   const [query, setQuery] = useState("")
   const [menu, setMenu] = useState(false);
-  const navigate = useNavigate();
-  const backendUrl = BackendUrl;
 
-
-  const searchedListing =async()=>{
-      try{
-        const response = await fetch(`${backendUrl}/listings/search?query=${query}`, {
-          method: 'GET'
-        })
-        const result = await response.json()
-        setLoading(true)
-        if(response.status ==200){
-          setLoading(false)
-          setListingData(result.listing)
-        }
-      }catch(error){
-        setLoading(false)
-        toast.error("failed")
-      }
-    }
-
-  const handleLogout = async () => {
-    const token = localStorage.getItem('token')
-    if(token.length >0){
-      setIsAuthenticated(false)
-      localStorage.removeItem('token')
-      toast.success("Logout success")
-      navigate("/")
-    }
-  
+  const handleLogout =() => {
+    dispatch(userLogOut())
   };
   useEffect(()=>{
-    searchedListing()
+    dispatch(fetchSearchListing(query))
   },[query])
+
+  useEffect(()=>{
+    dispatch(userAuthVerify())
+  },[dispatch])
 
   return (
     <>
@@ -67,7 +44,7 @@ function Navbar() {
       </div>
       <div className="hidden lg:flex items-center p-1.5 border-2 rounded-full w-96">
         <input value={query} onChange={(e)=> setQuery(e.target.value)} type="text" className="w-full px-2 outline-none" placeholder="Type location"/>
-        <button onClick={()=>searchedListing()} className="p-2 text-2xl text-white bg-red-500 rounded-full"><IoMdSearch/></button>
+        <button onClick={()=>dispatch(fetchSearchListing(query))} className="p-2 text-2xl text-white bg-red-500 rounded-full"><IoMdSearch/></button>
       </div>
       <div>
         {menu?  
@@ -77,18 +54,18 @@ function Navbar() {
       </div>
     </div>
     {menu && <div className="fixed z-50 p-5 bg-white border shadow-xl right-10 top-28 w-60 lg:w-80 rounded-xl">
-      {isAuthenticated && authUser.username &&
+      {userAuth.user  && userAuth.user.username &&
       <div className="py-5 border-b">
-        <p className="text-2xl font-semibold">{authUser?.username[0].toUpperCase()+ authUser?.username?.slice(1)}</p>
+        <p className="text-2xl font-semibold">{userAuth.user?.username[0].toUpperCase()+ userAuth.user?.username?.slice(1)}</p>
       </div>}      
-      {isAuthenticated && isAuthenticated &&
+      {userAuth && userAuth.isAuthenticated &&
       <div className="flex flex-col gap-2 py-5 border-b">
-        {authUser && authUser.role === 'ADMIN' &&
+        {userAuth && userAuth.user.role === 'ADMIN' &&
         <Link to={"/add"} className="hover:underline">Post Your Airbnb</Link>}
         <Link to={"/bookings"} className="hover:underline">Your Bookings</Link>
       </div>}
       <div className="flex flex-col gap-2 py-5 ">
-        {isAuthenticated? 
+        {userAuth.isAuthenticated? 
          <>
          <Link to={"/saved-listing"} className="hover:underline">Saved Listing</Link>
         <button onClick={handleLogout} className="flex justify-start hover:underline">Logout</button>

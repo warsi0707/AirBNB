@@ -59,6 +59,7 @@ bookingRouter.post("/:listingId", authChecker, async(req, res)=>{
             })
         }
         res.json({
+            booking: newBooking,
             message: "Booking successfully"
         })
     }catch(error){
@@ -67,17 +68,17 @@ bookingRouter.post("/:listingId", authChecker, async(req, res)=>{
         })
     }
 })
-bookingRouter.delete("/:bookingId", authChecker, async(req, res)=>{
-    
-    const {bookingId} = req.params;
+bookingRouter.delete("/:id", authChecker, async(req, res)=>{
+    const {id} = req.params;
     try{
-        const removeBooking = await Booking.findByIdAndDelete({_id:bookingId})
+        const removeBooking = await Booking.findByIdAndDelete({_id:id})
         if(!removeBooking){
             return res.status(404).json({
                 error: "Failed"
             })
         }
         return res.json({
+            booking: removeBooking,
             message: "Booking cancel"
         })
     }catch(error){

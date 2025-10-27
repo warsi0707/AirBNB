@@ -1,49 +1,22 @@
 import { useState } from 'react'
-import { useContext } from 'react'
 import { useRef } from 'react'
 import  { memo } from 'react'
-import AuthContext from '../context/AuthContext'
-import toast from 'react-hot-toast'
-import { BackendUrl } from '../helper'
-import { useNavigate, useParams } from "react-router";
+import {  useParams } from "react-router";
+import { useDispatch } from 'react-redux'
+import { fetchlistingByid, postReview } from '../redux/sclice/listingSlice'
 
 
-function RatingInputForm({handleReviewForm,handleListing}) {
-    const {authUser,isAuthenticated} = useContext(AuthContext)
+function RatingInputForm({handleReviewForm}) {
+    const dispatch = useDispatch()
     const {id} = useParams()
     const [noStar, setNostar] = useState([1,2,3,4,5])
     const [rate, setRate] = useState(3)
     const commentRef = useRef("")
-    const navigate = useNavigate()
 
-    const handleRating =async(e)=>{
-        e.preventDefault()
-        if(isAuthenticated == false){
-            toast.error("Login required")
-            return;
-        }
-        const comment = commentRef.current.value;
-        try{
-            const response = await fetch(`${BackendUrl}/rate/${id}`, {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    token: localStorage.getItem('token')
-                },
-                body: JSON.stringify({rate, comment})
-            })
-            const result =await response.json()
-            if(response.status ==200){
-                handleListing()
-                toast.success(result.message)
-                handleReviewForm(false)
-            }else{
-                toast.error(result.error)
-            }
-        }catch(error){
-            toast.error(error)
-        }
+    const handleRating =()=>{
+        dispatch(postReview({rate, comment:commentRef.current.value,id}))
+        dispatch(fetchlistingByid(id))
+        handleReviewForm()
     }
 
   return (

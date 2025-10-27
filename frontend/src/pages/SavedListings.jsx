@@ -1,10 +1,10 @@
 import { memo, useContext, useState } from "react"
 import SavedListingCard from "../components/SavedListingCard"
-import AuthContext from "../context/AuthContext"
+import { useSelector } from "react-redux"
 
 
 function SavedListings() {
-  const {saved} = useContext(AuthContext)
+  const saved = useSelector(state => state.listing.savedListing)
 
   if(saved.length ==0){
     return (
