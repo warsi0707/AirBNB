@@ -1,32 +1,36 @@
-import { memo, useCallback, useEffect, useState } from "react"
-import BookingCard from "../components/BookingCard"
+import { lazy, memo, useCallback, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { getBookings } from "../redux/sclice/listingSlice"
-
+import {fetchCancelBooking, getBookings } from "../redux/sclice/listingSlice"
+const BookingCard = lazy(()=> import("../components/BookingCard"))
 
 
  function YourBookings() {
   const dispatch = useDispatch()
   const bookings = useSelector(state => state.listing.bookings)
-  console.log(bookings)
 
   useEffect(()=>{
     dispatch(getBookings())
   },[dispatch])
 
-  if(bookings.length <=0){
+  const handleCancelBooking =useCallback((id)=>{
+    dispatch(fetchCancelBooking({id:id}))
+  },[])
+
+  if(bookings && bookings.length ==0){
     return (
-      <div className="h-[80vh] flex items-center justify-center">
+      <div className="h-[80vh] pt-32 flex items-center justify-center">
         <h1 className="text-5xl ">No Bookings </h1>
       </div>
     )
-  }
-  return (
+  }else{
+      return (
     <div className="flex flex-wrap w-full min-h-screen gap-10 p-5 justify-evenly ">
       {bookings && bookings?.bookings?.map((booking)=>(
-        <BookingCard key={booking._id} booking={booking} />
+        <BookingCard key={booking._id} booking={booking} handleCancelBooking={()=> handleCancelBooking(booking._id)} />
       ))}
     </div>
   )
+  }
+
 }
 export default memo(YourBookings)

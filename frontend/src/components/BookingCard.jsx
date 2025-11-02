@@ -1,16 +1,7 @@
 import { memo } from "react";
 import { MdOutlineCurrencyRupee } from "react-icons/md";
-import { useDispatch } from "react-redux";
-import { cancelBooking } from "../redux/sclice/listingSlice";
 
-function BookingCard({booking}) {
-  const dispatch = useDispatch()
-  console.log(booking)
-
-  const handleCancelBooking =(id)=>{
-    console.log("before dispatching id came: ", id)
-    dispatch(cancelBooking(id))
-  }
+function BookingCard({booking, handleCancelBooking}) {
   return (
     <div className='w-full h-full border shadow-md bg-slate-100 md:w-80 rounded-xl' >
       <div>
@@ -28,7 +19,7 @@ function BookingCard({booking}) {
         </div>
         <p>{booking?.listing?.description}</p>
 
-        <button onClick={()=> handleCancelBooking(booking._id)} className="p-2 text-white bg-black rounded-md">Cancel Booking</button>
+        <button onClick={handleCancelBooking} className="p-2 text-white bg-black rounded-md">Cancel Booking</button>
       </div>
     </div>
   )

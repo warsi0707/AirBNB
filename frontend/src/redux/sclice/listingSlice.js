@@ -137,9 +137,9 @@ export const fetchSearchListing = createAsyncThunk("fetch/searchListing", async(
         return rejectWithValue(error)
     }
 })
-export const cancelBooking = createAsyncThunk("fetch/cancelBooking", async(payload, {rejectWithValue})=>{
-    console.log(payload)
-    const response = await fetch(`${BackendUrl}/booking/${payload}`,{
+export const fetchCancelBooking = createAsyncThunk("fetch/cancelListingBooking", async({id})=>{
+    try{
+        const response = await fetch(`${BackendUrl}/booking/${id}`,{
         method: 'DELETE',
         headers: {
             token: localStorage.getItem('token')
@@ -150,7 +150,11 @@ export const cancelBooking = createAsyncThunk("fetch/cancelBooking", async(paylo
         toast.success(result.message)
         return result
     }else{
+        toast.error(result.error)
         return rejectWithValue(result.error)
+    }
+    }catch(error){
+        return rejectWithValue(error)
     }
 })
 
@@ -160,7 +164,9 @@ const listingSlcie = createSlice({
     initialState: {
         listing: [],
         detailedListing: {},
-        loading: false,
+        detailedListingLoading: false,
+        listingLoading: false,
+        bookingLoading: false,
         error: null,
         success: false,
         reviews: [],
@@ -196,12 +202,12 @@ const listingSlcie = createSlice({
     extraReducers: (builder)=>{
         builder.addCase(fetchListing.fulfilled, (state, action)=>{
             state.listing = action.payload,
-            state.loading = false,
+            state.listingLoading = false,
             state.error = null,
             state.success = true
         })
         .addCase(fetchListing.pending, (state)=>{
-            state.loading = true
+            state.listingLoading = true
         })
         .addCase(fetchListing.rejected, (state, action)=>{
             state.loading = false,
@@ -210,20 +216,19 @@ const listingSlcie = createSlice({
         })
         .addCase(fetchlistingByid.fulfilled, (state, action)=>{
             state.detailedListing = action.payload,
-            state.loading = false,
+            state.detailedListingLoading = false,
             state.error = null,
             state.success = true
         })
         .addCase(fetchlistingByid.pending, (state)=>{
-            state.loading = true
+            state.detailedListingLoading = true
         })
         .addCase(fetchlistingByid.rejected, (state, action)=>{
-            state.loading = false,
+            state.detailedListingLoading = false,
             state.error = action.payload,
             state.success = false
         })
         .addCase(getReviews.fulfilled, (state, action)=>{
-            state.loading = false
             state.reviews = action.payload.reviews
         })
         .addCase(getReviews.rejected, (state, action)=>{
@@ -231,7 +236,6 @@ const listingSlcie = createSlice({
             state.success = false
         })
         .addCase(postReview.fulfilled, (state, action)=>{
-            state.loading = false,
             state.error = null,
             state.reviews = action.payload.reviews;
         })
@@ -239,28 +243,24 @@ const listingSlcie = createSlice({
             state.error = action.payload
         })
         .addCase(deleteReview.fulfilled, (state, action)=>{
-            state.loading = false,
             state.error = null,
             state.success = true,
             state.reviews = state.reviews.filter((item)=> item._id !==action.payload.deltedReviewId)
         })
-        .addCase(deleteReview.pending, (state)=>{
-            state.loading = true
-        })
         .addCase(deleteReview.rejected, (state, action)=>{
-            state.loading = false,
             state.success = false,
             state.error = action.payload.error
         })
         .addCase(booking.pending, (state)=>{
-            state.loading = true
+            state.bookingLoading = true
         })
         .addCase(booking.rejected, (state)=>{
+            state.bookingLoading = false
             state.error  = true,
             state.success = false
         })
         .addCase(booking.fulfilled, (state, action)=>{
-            state.loading = false;
+            state.bookingLoading = false;
             state.error = false;
             state.success = true;
             if(!Array.isArray(state.bookings)){
@@ -269,29 +269,16 @@ const listingSlcie = createSlice({
             state.bookings.push(action.payload)
         })
         .addCase(getBookings.pending, (state)=>{
-            state.loading = true
+            state.bookingLoading = true
         })
         .addCase(getBookings.rejected, (state)=>{
-            state.loading = false,
+            state.bookingLoading = false,
             state.error = true
         })
         .addCase(getBookings.fulfilled, (state, action)=>{
-            state.loading = false,
+            state.bookingLoading = false,
             state.error = false,
             state.bookings = action.payload
-        })
-        .addCase(cancelBooking.pending, async(state)=>{
-            state.loading = true
-        })
-        .addCase(cancelBooking.fulfilled, (state, action)=>{
-            console.log(action.payload)
-            state.loading = false;
-            state.error = false;
-        })
-        .addCase(cancelBooking.rejected, (state, action)=>{
-            console.log(action.payload)
-            state.loading = false;
-            state.error = true;
         })
         .addCase(fetchSearchListing.pending, (state)=>{
             state.loading = true
@@ -302,6 +289,21 @@ const listingSlcie = createSlice({
         })
         .addCase(fetchSearchListing.rejected, (state, action)=>{
             state.loading = false
+        })
+        .addCase(fetchCancelBooking.pending, (state)=>{
+            state.bookingLoading = true
+        })
+        .addCase(fetchCancelBooking.fulfilled, (state, action)=>{
+            const listingId = action.payload.booking._id
+            state.bookingLoading = false
+            // if(!Array.isArray(state.bookings)){
+            //     state.bookings = []
+            // }
+            state.bookings = state.bookings.filter((booking)=> booking._id !==listingId)
+        })
+        .addCase(fetchCancelBooking.rejected, (state, action)=>{
+            state.bookingLoading = false
+            state.success = false
         })
     }
 })

@@ -18,7 +18,9 @@ function Navbar() {
     dispatch(userLogOut())
   };
   useEffect(()=>{
-    dispatch(fetchSearchListing(query))
+    if(!query.length <=0){
+      dispatch(fetchSearchListing(query))
+    }
   },[query])
 
   useEffect(()=>{

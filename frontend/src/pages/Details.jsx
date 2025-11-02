@@ -1,30 +1,34 @@
 import {  useParams } from "react-router";
-import { useEffect, useState } from "react";
+import { lazy, useEffect, useState } from "react";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { LuIndianRupee } from "react-icons/lu";
 import { IoPeopleSharp } from "react-icons/io5";
 import { IoBedSharp } from "react-icons/io5";
 import Ratings from "../components/Ratings";
-import RatingInputForm from "../components/RatingInputForm";
-import BookingInputForm from "../components/BookingInputForm";
+// import RatingInputForm from "../components/RatingInputForm";
+// import BookingInputForm from "../components/BookingInputForm";
 import { useDispatch, useSelector } from "react-redux";
-import {  fetchlistingByid, getReviews, } from "../redux/sclice/listingSlice";
+import {  fetchlistingByid, getBookings, getReviews, } from "../redux/sclice/listingSlice";
+import toast from "react-hot-toast";
+const RatingInputForm = lazy(()=> import("../components/RatingInputForm"))
+const BookingInputForm = lazy(()=>import("../components/BookingInputForm"))
 
 export default function Details() {
   const dispatch = useDispatch()
   const listing = useSelector(state => state.listing.detailedListing)
-  const loading = useSelector(state => state.listing.loading)
+  const loading = useSelector(state => state.listing.detailedListingLoading)
   const reviews = useSelector(state => state.listing.reviews)
   const { id } = useParams();
   const [isRating, setIsRating] = useState(false)
   const [isBooking, setIsBooking] = useState(false)
 
- 
+
   useEffect(() => {
     dispatch(fetchlistingByid(id))
     dispatch(getReviews(id))
+    dispatch(getBookings())
     // handleListing();
-  }, [ id,dispatch]);
+  }, [ dispatch,id]);
 
 
   if(loading){
@@ -86,7 +90,7 @@ export default function Details() {
               </div>
             ))}
         </div>
-        <button onClick={()=> setIsBooking(!isBooking)} className="w-full p-3 border border-gray-500 rounded-full hover:bg-red-500 hover:text-white">
+        <button onClick={()=>setIsBooking(!isBooking)} className="w-full p-3 border border-gray-500 rounded-full hover:bg-red-500 hover:text-white">
           Book Now
         </button>
         <div className="mx-auto">

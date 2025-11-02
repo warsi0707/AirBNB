@@ -7,24 +7,23 @@ import { fetchListing } from "../redux/sclice/listingSlice";
 function Home() {
   const dispatch = useDispatch();
   const listings = useSelector(state => state.listing.listing)
-  const loading = useSelector(state => state.listing.loading)
+  const loading = useSelector(state => state.listing.listingLoading)
 
 
   useEffect(() => {
     dispatch(fetchListing())
-    // allListing();
   }, [dispatch]);
 
-  if (loading) {
-    return (
-      <div className="w-full min-h-screen">
-      <Loading/>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="w-full min-h-screen">
+  //     <Loading/>
+  //     </div>
+  //   );
+  // }
   return (
     <>
-      {loading ? <h1>Loading...</h1> : ""}
+
       <div className="flex flex-wrap w-full min-h-screen gap-5 p-5 pt-10 md:px-10 ">
         {listings &&
           listings.map((listing) => (
@@ -33,7 +32,7 @@ function Home() {
               listing={listing}
             />
           ))}
-          {listings &&listings.length ==0 && 
+          {listings &&listings.length <=0 && 
           <div className="mx-auto">
             <p className="mt-20 text-xl">No matched listing</p>
           </div>

@@ -32,10 +32,10 @@ bookingRouter.post("/:id", authChecker, async(req, res)=>{
                 error: "All input required"
             })
         }
-        const bookings = await Booking.find({listing:id})
-        if(bookings.length >=0 && bookings.find((booking)=> booking.listing === id) ){
+        const bookings = await Booking.find({})
+        if(bookings.find((booking)=> booking.listing.toString() === id.toString()) ){
             return res.status(404).json({
-                error: "Already exists"
+                error: "Can't book existing listing"
             })
         }
         const newBooking = await Booking.create({
@@ -67,7 +67,6 @@ bookingRouter.post("/:id", authChecker, async(req, res)=>{
 })
 bookingRouter.delete("/:id", authChecker, async(req, res)=>{
     const {id} = req.params;
-    console.log(id)
     try{
         const removeBooking = await Booking.findByIdAndDelete({_id:id})
         if(!removeBooking){

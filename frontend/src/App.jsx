@@ -1,5 +1,5 @@
 import {BrowserRouter as Router,  Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
+// import Home from "./pages/Home";
 import Navbar from "./pages/Navbar";
 // import Details from "./pages/Details";
 // import Signup from "./pages/Signup";
@@ -7,11 +7,13 @@ import Navbar from "./pages/Navbar";
 // import Footer from "./components/Footer";
 // import Edit from "./pages/Edit";
 // import ErrorPage from "./components/ErrorPage";
-// import SavedListings from "./pages/SavedListings";
+// import SavedListings from "./pages/SavedListings"; 
 // import YourBookings from "./pages/YourBookings";
 
 import { useSelector } from "react-redux";
-import { lazy } from "react";
+import { lazy, Suspense } from "react";
+import Loading from "./components/Loading";
+const Home = lazy(()=> import("./pages/Home"))
 const Details = lazy(()=> import("./pages/Details"))
 const Signup = lazy(()=> import("./pages/Signup"))
 const Signin = lazy(()=> import("./pages/Signin"))
@@ -27,6 +29,7 @@ function App() {
  
   return (
     <>
+    <Suspense fallback={<Loading/>}>
     <Router>
       <Navbar/>
       <Routes>
@@ -42,6 +45,7 @@ function App() {
       </Routes>
       <Footer/>
     </Router>
+    </Suspense>
     </>
   )
 }

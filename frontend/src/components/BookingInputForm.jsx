@@ -19,8 +19,9 @@ function BookingInputForm({ handleBookingForm,listing }) {
   const [totalPrice, setTotalPrice] = useState(listing.price)
 
   const navigate = useNavigate()
+
   const handleBooking =async()=>{
-    await dispatch(booking({checkIn, checkOut, guests, firstName, lastName, phone, email, totalPrice,id})).unwrap()
+   await dispatch(booking({checkIn, checkOut, guests, firstName, lastName, phone, email, totalPrice,id})).unwrap()
     handleBookingForm()
     navigate('/bookings')
   }
@@ -61,7 +62,6 @@ function BookingInputForm({ handleBookingForm,listing }) {
                   <option value="6">6</option>
                 </select>
               </div>
-               
             </div>
           </div>
           <div className="flex flex-col gap-3">
