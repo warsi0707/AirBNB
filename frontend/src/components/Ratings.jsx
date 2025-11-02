@@ -21,11 +21,11 @@ function Ratings({rate}) {
         <img src="/user.png" className="rounded-full w-14 h-14" alt="" />
         <div>
           {rate?.user?.username &&
-          <p className="text-xl">{ rate.user.username.split('')[0].toUpperCase() + rate.user.username.slice(1)}</p>}
-          <p className="text-sm">{rate.user.role}</p>
+          <p className="text-xl">{rate?.user?.username.split('')[0].toUpperCase() + rate?.user?.username.slice(1)}</p>}
+          <p className="text-sm">{rate?.user?.role}</p>
         </div>
         </div>
-        {authUser && authUser?.user?.userId === rate?.user._id &&
+        {authUser && authUser?.user?.userId === rate?.user?._id &&
         <button onClick={()=> removeReview(rate._id)} className="text-lg"><i className="fa-solid fa-trash"></i></button>
         }
       </div>

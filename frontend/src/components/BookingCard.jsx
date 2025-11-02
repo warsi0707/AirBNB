@@ -2,6 +2,15 @@ import { memo } from "react";
 import { MdOutlineCurrencyRupee } from "react-icons/md";
 
 function BookingCard({booking, handleCancelBooking}) {
+  const CheckinDates = new Date(booking?.checkIn)
+  const inDate = CheckinDates.toLocaleDateString("en-IN",{day: "numeric"})
+  const inMonth = CheckinDates.toLocaleDateString('en-IN', {month: "short"})
+
+  const CheckoutDates = new Date(booking?.checkOut)
+  const outDate = CheckoutDates.toLocaleDateString("en-IN",{day: "numeric"})
+  const outMonth = CheckoutDates.toLocaleDateString('en-IN', {month: "short"})
+
+
   return (
     <div className='w-full h-full border shadow-md bg-slate-100 md:w-80 rounded-xl' >
       <div>
@@ -14,8 +23,8 @@ function BookingCard({booking, handleCancelBooking}) {
           <div className='flex items-center md:text-2xl'><MdOutlineCurrencyRupee/><p>{booking?.totalPrice}</p></div>
         </div>
         <div className='flex items-center justify-between'>
-          <p>{booking?.checkIn}</p>
-          <p>{booking?.checkOut}</p>
+          <p>{inDate} {inMonth}</p>
+          <p>{outDate} {outMonth}, 12:PM</p>
         </div>
         <p>{booking?.listing?.description}</p>
 

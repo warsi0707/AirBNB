@@ -41,8 +41,8 @@ bookingRouter.post("/:id", authChecker, async(req, res)=>{
         const newBooking = await Booking.create({
             listing: id,
             user: req.user.userId,
-            checkIn: Date(checkIn),
-            checkOut: Date(checkOut) ,
+            checkIn,
+            checkOut ,
             totalPrice,
             firstName,
             lastName,
@@ -56,7 +56,7 @@ bookingRouter.post("/:id", authChecker, async(req, res)=>{
             })
         }
         res.json({
-            booking: newBooking,
+            // booking: newBooking,
             message: "Booking successfully"
         })
     }catch(error){
@@ -75,7 +75,7 @@ bookingRouter.delete("/:id", authChecker, async(req, res)=>{
             })
         }
         return res.json({
-            booking: removeBooking,
+            bookingId: removeBooking._id,
             message: "Booking cancel"
         })
     }catch(error){

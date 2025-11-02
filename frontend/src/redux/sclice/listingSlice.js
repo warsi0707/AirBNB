@@ -137,7 +137,7 @@ export const fetchSearchListing = createAsyncThunk("fetch/searchListing", async(
         return rejectWithValue(error)
     }
 })
-export const fetchCancelBooking = createAsyncThunk("fetch/cancelListingBooking", async({id})=>{
+export const fetchCancelBooking = createAsyncThunk("fetch/cancelListingBooking", async({id},{rejectWithValue})=>{
     try{
         const response = await fetch(`${BackendUrl}/booking/${id}`,{
         method: 'DELETE',
@@ -294,17 +294,17 @@ const listingSlcie = createSlice({
             state.bookingLoading = true
         })
         .addCase(fetchCancelBooking.fulfilled, (state, action)=>{
-            const listingId = action.payload.booking._id
+            const listingId = action.payload.bookingId
             state.bookingLoading = false
-            // if(!Array.isArray(state.bookings)){
-            //     state.bookings = []
-            // }
-            state.bookings = state.bookings.filter((booking)=> booking._id !==listingId)
+            if(!Array.isArray(state.bookings)){
+                 state.bookingLoading = []
+            }
+           state.bookings= state.bookings.filter((booking)=> booking._id !==listingId)
         })
         .addCase(fetchCancelBooking.rejected, (state, action)=>{
             state.bookingLoading = false
             state.success = false
-        })
+        })  
     }
 })
 
