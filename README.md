@@ -49,6 +49,7 @@ To set up the Airbnb on your local machine, follow these steps:
 
 - **Frontend**:
   - React.js: For building the user interface.
+  - Redux: For managing state
   - React-Router: For navigation.
   - react-hot-toast: For pop-up status message.
   - Tailwind CSS: For styling components.

@@ -19,8 +19,8 @@ function BookingInputForm({ handleBookingForm,listing }) {
   const [totalPrice, setTotalPrice] = useState(listing.price)
 
   const navigate = useNavigate()
-  const handleBooking =()=>{
-    dispatch(booking({checkIn, checkOut, guests, firstName, lastName, phone, email, totalPrice,id}))
+  const handleBooking =async()=>{
+    await dispatch(booking({checkIn, checkOut, guests, firstName, lastName, phone, email, totalPrice,id})).unwrap()
     handleBookingForm()
     navigate('/bookings')
   }

@@ -98,7 +98,7 @@ export const booking = createAsyncThunk('fetch/listingBooking', async(payload, {
         const result = await response.json()
         if(response.status ==200){
             toast.success(result.message)
-            return result
+            return result.booking
         }else{
             toast.error(result.error)
             return rejectWithValue(result.error)
@@ -124,8 +124,6 @@ export const getBookings =createAsyncThunk('fetch/getingBooking', async(_,{rejec
         return rejectWithValue(error)
     }
 })
-export const fetchCancelBooking = createAsyncThunk('fetch/cancelBooking', async(payload, {rejectWithValue})=>{
-})
 export const fetchSearchListing = createAsyncThunk("fetch/searchListing", async(payload, {rejectWithValue})=>{
     try{
         const response = await fetch(`${BackendUrl}/listings/search?query=${payload}`)
@@ -137,6 +135,22 @@ export const fetchSearchListing = createAsyncThunk("fetch/searchListing", async(
         }
     }catch(error){
         return rejectWithValue(error)
+    }
+})
+export const cancelBooking = createAsyncThunk("fetch/cancelBooking", async(payload, {rejectWithValue})=>{
+    console.log(payload)
+    const response = await fetch(`${BackendUrl}/booking/${payload}`,{
+        method: 'DELETE',
+        headers: {
+            token: localStorage.getItem('token')
+        }
+    })
+    const result = await response.json()
+    if(response.status == 200){
+        toast.success(result.message)
+        return result
+    }else{
+        return rejectWithValue(result.error)
     }
 })
 
@@ -241,19 +255,23 @@ const listingSlcie = createSlice({
         .addCase(booking.pending, (state)=>{
             state.loading = true
         })
-        .addCase(booking.rejected, (state, payload)=>{
+        .addCase(booking.rejected, (state)=>{
             state.error  = true,
             state.success = false
         })
         .addCase(booking.fulfilled, (state, action)=>{
-            state.loading = false,
-            state.error = false,
-            state.success = true
+            state.loading = false;
+            state.error = false;
+            state.success = true;
+            if(!Array.isArray(state.bookings)){
+                state.bookings = []
+            }
+            state.bookings.push(action.payload)
         })
         .addCase(getBookings.pending, (state)=>{
             state.loading = true
         })
-        .addCase(getBookings.rejected, (state, action)=>{
+        .addCase(getBookings.rejected, (state)=>{
             state.loading = false,
             state.error = true
         })
@@ -262,16 +280,18 @@ const listingSlcie = createSlice({
             state.error = false,
             state.bookings = action.payload
         })
-        .addCase(fetchCancelBooking.pending, async(state)=>{
+        .addCase(cancelBooking.pending, async(state)=>{
             state.loading = true
         })
-        .addCase(fetchCancelBooking.fulfilled, (state, action)=>{
-            state.loading = false
-            state.error = false
+        .addCase(cancelBooking.fulfilled, (state, action)=>{
+            console.log(action.payload)
+            state.loading = false;
+            state.error = false;
         })
-        .addCase(fetchCancelBooking.rejected, (state, action)=>{
-            state.loading = false
-            state.error = true
+        .addCase(cancelBooking.rejected, (state, action)=>{
+            console.log(action.payload)
+            state.loading = false;
+            state.error = true;
         })
         .addCase(fetchSearchListing.pending, (state)=>{
             state.loading = true

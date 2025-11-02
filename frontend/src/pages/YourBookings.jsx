@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useState } from "react"
 import BookingCard from "../components/BookingCard"
 import { useDispatch, useSelector } from "react-redux"
-import {  fetchCancelBooking, getBookings } from "../redux/sclice/listingSlice"
+import { getBookings } from "../redux/sclice/listingSlice"
 
 
 
@@ -9,12 +9,6 @@ import {  fetchCancelBooking, getBookings } from "../redux/sclice/listingSlice"
   const dispatch = useDispatch()
   const bookings = useSelector(state => state.listing.bookings)
   console.log(bookings)
-
-  const handleCancelBooking =(id)=>{
-    console.log("handleCancel received ID:", id);
-    const result = dispatch(fetchCancelBooking(id));
-  }
-
 
   useEffect(()=>{
     dispatch(getBookings())
@@ -30,7 +24,7 @@ import {  fetchCancelBooking, getBookings } from "../redux/sclice/listingSlice"
   return (
     <div className="flex flex-wrap w-full min-h-screen gap-10 p-5 justify-evenly ">
       {bookings && bookings?.bookings?.map((booking)=>(
-        <BookingCard key={booking._id} booking={booking} handleCancelBooking={()=> handleCancelBooking(booking._id)} />
+        <BookingCard key={booking._id} booking={booking} />
       ))}
     </div>
   )

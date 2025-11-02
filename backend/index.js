@@ -15,7 +15,7 @@ const { FRONTEND_URL } = require('./config')
 
 app.use(cors({
     origin: FRONTEND_URL,
-    credentials: true
+    // credentials: true
 }))
 
 ConnectDB()

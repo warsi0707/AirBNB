@@ -33,7 +33,7 @@ function Home() {
               listing={listing}
             />
           ))}
-          {listings.length ==0 && 
+          {listings &&listings.length ==0 && 
           <div className="mx-auto">
             <p className="mt-20 text-xl">No matched listing</p>
           </div>

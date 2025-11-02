@@ -1,15 +1,25 @@
 import {BrowserRouter as Router,  Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Navbar from "./pages/Navbar";
-import Details from "./pages/Details";
-import Signup from "./pages/Signup";
-import Signin from "./pages/Signin";
-import Footer from "./components/Footer";
-import Edit from "./pages/Edit";
-import ErrorPage from "./components/ErrorPage";
-import SavedListings from "./pages/SavedListings";
-import YourBookings from "./pages/YourBookings";
+// import Details from "./pages/Details";
+// import Signup from "./pages/Signup";
+// import Signin from "./pages/Signin";
+// import Footer from "./components/Footer";
+// import Edit from "./pages/Edit";
+// import ErrorPage from "./components/ErrorPage";
+// import SavedListings from "./pages/SavedListings";
+// import YourBookings from "./pages/YourBookings";
+
 import { useSelector } from "react-redux";
+import { lazy } from "react";
+const Details = lazy(()=> import("./pages/Details"))
+const Signup = lazy(()=> import("./pages/Signup"))
+const Signin = lazy(()=> import("./pages/Signin"))
+const Footer = lazy(()=> import("./components/Footer"))
+const Edit = lazy(()=> import("./pages/Edit"))
+const ErrorPage = lazy(()=> import("./components/ErrorPage"))
+const SavedListings = lazy(()=> import("./pages/SavedListings"))
+const YourBookings = lazy(()=> import("./pages/YourBookings"))
 
 
 function App() {
